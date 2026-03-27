@@ -220,10 +220,32 @@ export default function SettingsView({
 
   const handleAddCategory = async (e) => {
     e.preventDefault();
+    
+    // 1. Trazador de depuración en consola
+    console.log("ESTADO ACTUAL DEL PERFIL:", profile);
+    console.log("ID DE ESPACIO A ENVIAR:", profile?.espacio_shared_id);
+
+    // 2. Barrera de validación (Hard Stop)
+    if (!profile || !profile.espacio_shared_id) {
+      alert("ERROR CRÍTICO: Tu perfil no tiene un 'espacio_id' asignado. Recarga la página o verifica la base de datos.");
+      return; // Detener la ejecución aquí, no llamar a Supabase
+    }
+
     if (!newCategory.trim()) return;
     
     try {
+      // 3. Llamada a Supabase (Asegurando el mapeo exacto)
+      const payload = {
+        nombre: newCategory.trim(),
+        icono: selectedIcon,
+        color: selectedColor,
+        espacio_id: profile.espacio_shared_id
+      };
+
+      console.log("PAYLOAD FINAL A SUPABASE:", payload);
+
       await onAddCategory(newCategory.trim(), selectedIcon, selectedColor);
+      
       setNewCategory('');
       setSelectedIcon('ShoppingBag');
       setSelectedColor('#18181b');

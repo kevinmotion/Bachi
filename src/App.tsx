@@ -96,7 +96,7 @@ export default function App() {
   } = useExpenses(
     profile?.nombre || 'Yo',
     'Pareja', // Static fallback, will be overridden by spaceUsers logic
-    profile?.espacio_shared_id
+    profile
   );
 
   const { 
@@ -106,7 +106,7 @@ export default function App() {
     addCategory, 
     updateCategory,
     deleteCategory 
-  } = useCategories(profile?.espacio_shared_id);
+  } = useCategories(profile);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();

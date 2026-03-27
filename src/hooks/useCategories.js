@@ -1,18 +1,15 @@
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '../lib/supabaseClient';
 
-export const useCategories = (espacioId = undefined) => {
+export const useCategories = (profile) => {
+  const espacioId = profile?.espacio_shared_id;
   const [categories, setCategories] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const fetchCategories = useCallback(async () => {
-    if (espacioId === undefined) return; // Silent return while loading profile
+    if (!espacioId) return; // Silent return while loading profile
     
-    if (espacioId === null) {
-      console.error("[useCategories] Error: espacioId es nulo. No se pueden obtener categorías.");
-      return;
-    }
     setIsLoading(true);
     setError(null);
     try {
@@ -33,14 +30,14 @@ export const useCategories = (espacioId = undefined) => {
   }, [espacioId]);
 
   const addCategory = async (nombre, icono = 'ShoppingBag', color = '#18181b') => {
-    if (!espacioId || !nombre.trim()) return;
+    if (!profile || !profile.espacio_shared_id) throw new Error("Perfil no cargado");
     setIsLoading(true);
     try {
       const { data, error: supabaseError } = await supabase
         .from('categorias')
         .insert([{ 
           nombre: nombre.trim(), 
-          espacio_id: espacioId,
+          espacio_id: profile.espacio_shared_id,
           icono: icono,
           color: color
         }])

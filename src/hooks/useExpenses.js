@@ -1,7 +1,8 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { supabase } from '../lib/supabaseClient';
 
-export const useExpenses = (userName = 'Usuario A', partnerName = 'Usuario B', espacioId = undefined) => {
+export const useExpenses = (userName = 'Usuario A', partnerName = 'Usuario B', profile) => {
+  const espacioId = profile?.espacio_shared_id;
   const [expenses, setExpenses] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -23,12 +24,8 @@ export const useExpenses = (userName = 'Usuario A', partnerName = 'Usuario B', e
   }, [espacioId]);
 
   const fetchExpenses = useCallback(async () => {
-    if (espacioId === undefined) return; // Silent return while loading profile
+    if (!espacioId) return; // Silent return while loading profile
     
-    if (espacioId === null) {
-      console.error("[useExpenses] Error: espacioId es nulo. No se pueden obtener gastos.");
-      return;
-    }
     setIsLoading(true);
     setError(null);
     try {
@@ -49,18 +46,13 @@ export const useExpenses = (userName = 'Usuario A', partnerName = 'Usuario B', e
   }, [espacioId]);
 
   const addExpense = async (expenseData) => {
-    if (!espacioId) {
-      const errorMsg = `[useExpenses] Error: espacioId es ${espacioId === null ? 'nulo' : 'indefinido'}. No se puede registrar el gasto.`;
-      console.error(errorMsg);
-      setError(errorMsg);
-      return;
-    }
+    if (!profile || !profile.espacio_shared_id) throw new Error("Perfil no cargado");
     setIsLoading(true);
     setError(null);
     try {
       const { data, error: supabaseError } = await supabase
         .from('gastos')
-        .insert([{ ...expenseData, espacio_id: espacioId }])
+        .insert([{ ...expenseData, espacio_id: profile.espacio_shared_id }])
         .select();
 
       if (supabaseError) {
