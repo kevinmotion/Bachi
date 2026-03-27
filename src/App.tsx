@@ -13,6 +13,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { Wallet, PlusCircle, History, LayoutDashboard, LogOut, Loader2, PieChart, Plus } from 'lucide-react';
 
 export default function App() {
+  // Comentario para habilitar un nuevo commit
   const [session, setSession] = useState(null);
   const [profile, setProfile] = useState(null);
   const [currentView, setCurrentView] = useState('home');
