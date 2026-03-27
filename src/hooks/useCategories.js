@@ -46,7 +46,10 @@ export const useCategories = (espacioId = undefined) => {
         }])
         .select();
 
-      if (supabaseError) throw supabaseError;
+      if (supabaseError) {
+        console.error("[useCategories] Error al insertar categoría:", supabaseError);
+        throw supabaseError;
+      }
       setCategories(prev => [...prev, data[0]]);
       return data[0];
     } catch (err) {

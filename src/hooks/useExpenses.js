@@ -63,7 +63,10 @@ export const useExpenses = (userName = 'Usuario A', partnerName = 'Usuario B', e
         .insert([{ ...expenseData, espacio_id: espacioId }])
         .select();
 
-      if (supabaseError) throw supabaseError;
+      if (supabaseError) {
+        console.error("[useExpenses] Error al insertar gasto:", supabaseError);
+        throw supabaseError;
+      }
       
       // Update local state
       setExpenses(prev => [data[0], ...prev]);
