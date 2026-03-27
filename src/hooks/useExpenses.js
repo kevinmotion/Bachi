@@ -135,7 +135,7 @@ export const useExpenses = (userName = 'Usuario A', partnerName = 'Usuario B', p
       netBalance,
       summary
     };
-  }, [expenses, userName, partnerName]);
+  }, [expenses, userName, partnerName, spaceUsers]);
 
   const deleteExpense = async (id) => {
     console.log("Iniciando borrado para ID:", id);
