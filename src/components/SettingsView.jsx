@@ -120,7 +120,9 @@ export default function SettingsView({
   onAddCategory, 
   onUpdateCategory,
   onDeleteCategory, 
-  categoriesLoading 
+  categoriesLoading,
+  theme,
+  setTheme
 }) {
   const [authUserId, setAuthUserId] = useState(null);
   const [userName, setUserName] = useState(profile?.nombre || '');
@@ -164,21 +166,21 @@ export default function SettingsView({
     return (
       <button
         onClick={() => toggleSection(id)}
-        className={`w-full flex items-center justify-between p-6 rounded-[32px] transition-all ${
-          isOpen ? 'bg-zinc-900 text-white shadow-xl shadow-zinc-200' : 'bg-white border border-zinc-100 text-zinc-900'
+        className={`w-full flex items-center justify-between p-3 rounded-xl transition-all ${
+          isOpen ? 'bg-zinc-900 text-white shadow-md shadow-zinc-200 dark:bg-zinc-800 dark:shadow-none' : 'bg-white border border-zinc-100 text-zinc-900 dark:bg-zinc-900 dark:border-zinc-800 dark:text-zinc-100'
         }`}
       >
-        <div className="flex items-center gap-4 text-left">
-          <div className={`p-2.5 rounded-2xl transition-colors ${isOpen ? 'bg-white/10 text-white' : 'bg-zinc-50 text-zinc-400'}`}>
-            <Icon size={20} />
+        <div className="flex items-center gap-3 text-left">
+          <div className={`p-1.5 rounded-lg transition-colors ${isOpen ? 'bg-white/10 text-white' : 'bg-zinc-50 text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500'}`}>
+            <Icon size={16} />
           </div>
           <div className="space-y-0.5">
-            <h3 className="font-bold text-sm tracking-tight">{title}</h3>
-            {subtitle && !isOpen && <p className="text-[10px] text-zinc-400 uppercase tracking-widest font-bold">{subtitle}</p>}
+            <h3 className="font-bold text-xs tracking-tight">{title}</h3>
+            {subtitle && !isOpen && <p className="text-[9px] text-zinc-400 uppercase tracking-widest font-bold">{subtitle}</p>}
           </div>
         </div>
-        <div className={`transition-transform duration-300 ${isOpen ? 'rotate-90 text-white' : 'text-zinc-300'}`}>
-          <ChevronRight size={20} />
+        <div className={`transition-transform duration-300 ${isOpen ? 'rotate-90 text-white' : 'text-zinc-300 dark:text-zinc-600'}`}>
+          <ChevronRight size={16} />
         </div>
       </button>
     );
@@ -438,8 +440,59 @@ export default function SettingsView({
         <p className="text-xs text-zinc-400">Personaliza tu experiencia y sincroniza datos.</p>
       </header>
 
+      {/* Apariencia Section */}
+      <div className="space-y-1.5">
+        <SectionHeader 
+          id="appearance" 
+          icon={Moon} 
+          title="Apariencia" 
+          subtitle="Tema de la aplicación" 
+        />
+        <AnimatePresence>
+          {openSection === 'appearance' && (
+            <motion.section
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              className="overflow-hidden"
+            >
+              <div className="bg-white dark:bg-zinc-900 p-3 rounded-xl border border-zinc-100 dark:border-zinc-800 shadow-sm space-y-3 mt-1 mx-1">
+                <div className="space-y-2">
+                  <label className="text-[9px] uppercase font-bold tracking-widest opacity-40 dark:text-zinc-400">
+                    Tema
+                  </label>
+                  <div className="grid grid-cols-3 gap-2">
+                    <button
+                      onClick={() => setTheme('light')}
+                      className={`flex flex-col items-center justify-center p-2 rounded-lg border ${theme === 'light' ? 'border-zinc-900 bg-zinc-50 dark:border-zinc-100 dark:bg-zinc-800' : 'border-zinc-100 bg-white dark:border-zinc-800 dark:bg-zinc-900'} transition-all`}
+                    >
+                      <Sun size={16} className={theme === 'light' ? 'text-zinc-900 dark:text-zinc-100' : 'text-zinc-400'} />
+                      <span className={`text-[10px] mt-1 font-medium ${theme === 'light' ? 'text-zinc-900 dark:text-zinc-100' : 'text-zinc-500'}`}>Claro</span>
+                    </button>
+                    <button
+                      onClick={() => setTheme('dark')}
+                      className={`flex flex-col items-center justify-center p-2 rounded-lg border ${theme === 'dark' ? 'border-zinc-900 bg-zinc-50 dark:border-zinc-100 dark:bg-zinc-800' : 'border-zinc-100 bg-white dark:border-zinc-800 dark:bg-zinc-900'} transition-all`}
+                    >
+                      <Moon size={16} className={theme === 'dark' ? 'text-zinc-900 dark:text-zinc-100' : 'text-zinc-400'} />
+                      <span className={`text-[10px] mt-1 font-medium ${theme === 'dark' ? 'text-zinc-900 dark:text-zinc-100' : 'text-zinc-500'}`}>Oscuro</span>
+                    </button>
+                    <button
+                      onClick={() => setTheme('system')}
+                      className={`flex flex-col items-center justify-center p-2 rounded-lg border ${theme === 'system' ? 'border-zinc-900 bg-zinc-50 dark:border-zinc-100 dark:bg-zinc-800' : 'border-zinc-100 bg-white dark:border-zinc-800 dark:bg-zinc-900'} transition-all`}
+                    >
+                      <Monitor size={16} className={theme === 'system' ? 'text-zinc-900 dark:text-zinc-100' : 'text-zinc-400'} />
+                      <span className={`text-[10px] mt-1 font-medium ${theme === 'system' ? 'text-zinc-900 dark:text-zinc-100' : 'text-zinc-500'}`}>Sistema</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </motion.section>
+          )}
+        </AnimatePresence>
+      </div>
+
       {/* Identidad Section */}
-      <div className="space-y-2">
+      <div className="space-y-1.5">
         <SectionHeader 
           id="identity" 
           icon={Fingerprint} 
@@ -454,25 +507,25 @@ export default function SettingsView({
               exit={{ height: 0, opacity: 0 }}
               className="overflow-hidden"
             >
-              <div className="bg-white p-6 rounded-[32px] border border-zinc-100 shadow-sm space-y-6 mt-1 mx-1">
-                <div className="space-y-4">
+              <div className="bg-white dark:bg-zinc-900 p-3 rounded-xl border border-zinc-100 dark:border-zinc-800 shadow-sm space-y-3 mt-1 mx-1">
+                <div className="space-y-3">
                   <div className="flex items-center justify-between px-1">
-                    <label className="text-[10px] uppercase font-bold tracking-widest opacity-40">
+                    <label className="text-[9px] uppercase font-bold tracking-widest opacity-40 dark:text-zinc-400">
                       User ID (UUID)
                     </label>
                   </div>
                   
-                  <div className="flex flex-col gap-3">
-                    <div className="bg-zinc-50 p-4 rounded-2xl border border-zinc-100 flex items-center justify-between overflow-hidden shadow-inner group">
-                      <code className="text-[10px] font-mono text-zinc-500 truncate select-all">
+                  <div className="flex flex-col gap-2">
+                    <div className="bg-zinc-50 dark:bg-zinc-800 p-2.5 rounded-lg border border-zinc-100 dark:border-zinc-700 flex items-center justify-between overflow-hidden shadow-inner group">
+                      <code className="text-[9px] font-mono text-zinc-500 dark:text-zinc-400 truncate select-all">
                         {showId ? authUserId : '********-****-****-****-************'}
                       </code>
                       <button 
                         type="button"
                         onClick={() => setShowId(!showId)}
-                        className="p-2 text-zinc-400 hover:text-zinc-900 transition-colors"
+                        className="p-1 text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
                       >
-                        {showId ? <EyeOff size={16} /> : <Eye size={16} />}
+                        {showId ? <EyeOff size={12} /> : <Eye size={12} />}
                       </button>
                     </div>
                     
@@ -480,16 +533,16 @@ export default function SettingsView({
                       <button 
                         type="button"
                         onClick={() => copyToClipboard(authUserId, 'ID copiado')}
-                        className="flex items-center justify-center gap-2 py-3.5 bg-zinc-50 border border-zinc-100 text-zinc-600 rounded-xl font-bold text-[10px] uppercase tracking-widest active:scale-95"
+                        className="flex items-center justify-center gap-1.5 py-2 bg-zinc-50 dark:bg-zinc-800 border border-zinc-100 dark:border-zinc-700 text-zinc-600 dark:text-zinc-300 rounded-lg font-bold text-[9px] uppercase tracking-widest active:scale-95"
                       >
-                        <ClipboardCheck size={14} /> Copiar
+                        <ClipboardCheck size={12} /> Copiar
                       </button>
                       <button 
                         type="button"
                         onClick={handleShare}
-                        className="flex items-center justify-center gap-2 py-3.5 bg-zinc-900 text-white rounded-xl font-bold text-[10px] uppercase tracking-widest active:scale-95 shadow-lg shadow-zinc-100"
+                        className="flex items-center justify-center gap-1.5 py-2 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded-lg font-bold text-[9px] uppercase tracking-widest active:scale-95 shadow-lg shadow-zinc-100 dark:shadow-none"
                       >
-                        <Share2 size={14} /> Compartir
+                        <Share2 size={12} /> Compartir
                       </button>
                     </div>
                   </div>
@@ -501,7 +554,7 @@ export default function SettingsView({
       </div>
 
       {/* Perfil Section */}
-      <div className="space-y-2">
+      <div className="space-y-1.5">
         <SectionHeader 
           id="profile" 
           icon={User} 
@@ -516,10 +569,10 @@ export default function SettingsView({
               exit={{ height: 0, opacity: 0 }}
               className="overflow-hidden"
             >
-              <div className="bg-white p-6 rounded-[32px] border border-zinc-100 shadow-sm space-y-6 mt-1 mx-1">
-                <form onSubmit={handleSave} className="space-y-6">
-                  <div className="space-y-2">
-                    <label className="text-[10px] uppercase font-bold tracking-widest opacity-40 px-1">
+              <div className="bg-white dark:bg-zinc-900 p-3 rounded-xl border border-zinc-100 dark:border-zinc-800 shadow-sm space-y-3 mt-1 mx-1">
+                <form onSubmit={handleSave} className="space-y-3">
+                  <div className="space-y-1.5">
+                    <label className="text-[9px] uppercase font-bold tracking-widest opacity-40 px-1 dark:text-zinc-400">
                       Mi Nombre
                     </label>
                     <input
@@ -527,7 +580,7 @@ export default function SettingsView({
                       value={userName}
                       onChange={(e) => setUserName(e.target.value)}
                       placeholder="Tu nombre"
-                      className="w-full bg-zinc-50 border border-zinc-100 rounded-2xl px-5 py-3.5 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-900 transition-all font-medium"
+                      className="w-full bg-zinc-50 dark:bg-zinc-800 border border-zinc-100 dark:border-zinc-700 rounded-lg px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-zinc-900 dark:focus:ring-zinc-100 transition-all font-medium dark:text-zinc-100"
                       required
                     />
                   </div>
@@ -535,21 +588,21 @@ export default function SettingsView({
                   <button
                     type="submit"
                     disabled={isSaved || loading}
-                    className={`w-full py-4 rounded-2xl font-bold text-xs flex items-center justify-center gap-2 transition-all ${
+                    className={`w-full py-2.5 rounded-lg font-bold text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 transition-all ${
                       isSaved 
                         ? 'bg-green-500 text-white' 
-                        : 'bg-zinc-900 text-white shadow-lg shadow-zinc-100'
+                        : 'bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 shadow-md shadow-zinc-100 dark:shadow-none'
                     } active:scale-95 disabled:opacity-50`}
                   >
                     {loading ? (
-                      <Loader2 className="animate-spin" size={16} />
+                      <Loader2 className="animate-spin" size={14} />
                     ) : isSaved ? (
                       <>
-                        <CheckCircle2 size={16} /> ¡Actualizado!
+                        <CheckCircle2 size={14} /> ¡Actualizado!
                       </>
                     ) : (
                       <>
-                        <Save size={16} /> Guardar Perfil
+                        <Save size={14} /> Guardar Perfil
                       </>
                     )}
                   </button>
@@ -561,7 +614,7 @@ export default function SettingsView({
       </div>
 
       {/* Sincronización Section */}
-      <div className="space-y-2">
+      <div className="space-y-1.5">
         <SectionHeader 
           id="sync" 
           icon={RefreshCw} 
@@ -576,28 +629,28 @@ export default function SettingsView({
               exit={{ height: 0, opacity: 0 }}
               className="overflow-hidden"
             >
-              <div className="bg-white p-6 rounded-[32px] border border-zinc-100 shadow-sm space-y-6 mt-1 mx-1">
-                <div className="bg-zinc-50 p-5 rounded-2xl border border-zinc-100 space-y-4">
-                  <h4 className="text-[10px] uppercase font-bold tracking-widest text-zinc-900">¿Cómo sincronizar?</h4>
-                  <div className="space-y-3">
+              <div className="bg-white dark:bg-zinc-900 p-3 rounded-xl border border-zinc-100 dark:border-zinc-800 shadow-sm space-y-3 mt-1 mx-1">
+                <div className="bg-zinc-50 dark:bg-zinc-800 p-3 rounded-lg border border-zinc-100 dark:border-zinc-700 space-y-2">
+                  <h4 className="text-[9px] uppercase font-bold tracking-widest text-zinc-900 dark:text-zinc-100">¿Cómo sincronizar?</h4>
+                  <div className="space-y-1.5">
                     {[
                       'Pide el User ID a tu pareja.',
                       'Pégalo abajo y pulsa Vincular.',
                       'La app se actualizará sola.'
                     ].map((step, i) => (
-                      <div key={i} className="flex gap-3 items-center">
-                        <span className="w-5 h-5 bg-zinc-900 rounded-full flex items-center justify-center text-[9px] font-bold text-white shrink-0">
+                      <div key={i} className="flex gap-2 items-center">
+                        <span className="w-3.5 h-3.5 bg-zinc-900 dark:bg-zinc-100 rounded-full flex items-center justify-center text-[7px] font-bold text-white dark:text-zinc-900 shrink-0">
                           {i + 1}
                         </span>
-                        <p className="text-[10px] text-zinc-500">{step}</p>
+                        <p className="text-[9px] text-zinc-500 dark:text-zinc-400">{step}</p>
                       </div>
                     ))}
                   </div>
                 </div>
 
-                <div className="space-y-4">
-                  <div className="space-y-2">
-                    <label className="text-[10px] uppercase font-bold tracking-widest opacity-40 px-1">
+                <div className="space-y-2.5">
+                  <div className="space-y-1.5">
+                    <label className="text-[9px] uppercase font-bold tracking-widest opacity-40 px-1 dark:text-zinc-400">
                       ID de tu Pareja
                     </label>
                     <div className="flex gap-2">
@@ -606,23 +659,23 @@ export default function SettingsView({
                         value={partnerUserId}
                         onChange={(e) => setPartnerUserId(e.target.value)}
                         placeholder="UUID de pareja..."
-                        className="flex-1 bg-zinc-50 border border-zinc-100 rounded-xl px-4 py-3 text-[10px] font-mono focus:outline-none focus:ring-2 focus:ring-zinc-900"
+                        className="flex-1 bg-zinc-50 dark:bg-zinc-800 border border-zinc-100 dark:border-zinc-700 rounded-lg px-3 py-2 text-[9px] font-mono focus:outline-none focus:ring-2 focus:ring-zinc-900 dark:focus:ring-zinc-100 dark:text-zinc-100"
                       />
                       <button 
                         type="button"
                         onClick={handleSync}
                         disabled={linking || !partnerUserId}
-                        className="px-5 bg-zinc-900 text-white rounded-xl font-bold text-[10px] uppercase tracking-widest active:scale-95 disabled:opacity-50"
+                        className="px-3 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded-lg font-bold text-[9px] uppercase tracking-widest active:scale-95 disabled:opacity-50"
                       >
-                        {linking ? <Loader2 className="animate-spin" size={14} /> : 'Vincular'}
+                        {linking ? <Loader2 className="animate-spin" size={12} /> : 'Vincular'}
                       </button>
                     </div>
                   </div>
 
-                  <div className="space-y-2 pt-4 border-t border-zinc-50">
-                    <label className="text-[10px] uppercase font-bold tracking-widest opacity-40 px-1">Espacio Actual</label>
+                  <div className="space-y-1.5 pt-2 border-t border-zinc-50 dark:border-zinc-800">
+                    <label className="text-[9px] uppercase font-bold tracking-widest opacity-40 px-1 dark:text-zinc-400">Espacio Actual</label>
                     <div className="flex gap-2">
-                      <div className="flex-1 bg-zinc-50 border border-zinc-100 rounded-xl px-4 py-3 text-[9px] font-mono text-zinc-400 truncate">
+                      <div className="flex-1 bg-zinc-50 dark:bg-zinc-800 border border-zinc-100 dark:border-zinc-700 rounded-lg px-3 py-2 text-[8px] font-mono text-zinc-400 dark:text-zinc-500 truncate">
                         {syncId || 'Sin vincular'}
                       </div>
                       <button 
@@ -631,9 +684,9 @@ export default function SettingsView({
                           setSyncId(crypto.randomUUID());
                           showToast('Nuevo ID generado');
                         }}
-                        className="w-10 h-10 bg-zinc-50 text-zinc-400 rounded-xl border border-zinc-100 active:scale-90 flex items-center justify-center"
+                        className="w-8 h-8 bg-zinc-50 dark:bg-zinc-800 text-zinc-400 dark:text-zinc-500 rounded-lg border border-zinc-100 dark:border-zinc-700 active:scale-90 flex items-center justify-center"
                       >
-                        <RefreshCw size={16} />
+                        <RefreshCw size={12} />
                       </button>
                     </div>
                   </div>
@@ -645,7 +698,7 @@ export default function SettingsView({
       </div>
 
       {/* Categorías Section */}
-      <div className="space-y-2">
+      <div className="space-y-1.5">
         <SectionHeader 
           id="categories" 
           icon={List} 
@@ -660,7 +713,7 @@ export default function SettingsView({
               exit={{ height: 0, opacity: 0 }}
               className="overflow-hidden"
             >
-              <div className="bg-white p-6 rounded-[32px] border border-zinc-100 shadow-sm space-y-6 mt-1 mx-1">
+              <div className="bg-white dark:bg-zinc-900 p-3 rounded-xl border border-zinc-100 dark:border-zinc-800 shadow-sm space-y-3 mt-1 mx-1">
                 <button
                   onClick={() => {
                     setEditingCategory(null);
@@ -668,29 +721,27 @@ export default function SettingsView({
                     setShowAllIcons(false);
                     setIsCategoryModalOpen(true);
                   }}
-                  className="w-full py-4 bg-zinc-50 border border-zinc-100 rounded-2xl text-zinc-900 font-bold text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-zinc-100 transition-all active:scale-95"
+                  className="w-full py-2.5 bg-zinc-50 dark:bg-zinc-800 border border-zinc-100 dark:border-zinc-700 rounded-lg text-zinc-900 dark:text-zinc-100 font-bold text-[9px] uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-zinc-100 dark:hover:bg-zinc-700 transition-all active:scale-95"
                 >
-                  <Plus size={16} /> Añadir Nueva Categoría
+                  <Plus size={14} /> Añadir Nueva Categoría
                 </button>
 
                 <div className="space-y-2 max-h-[300px] overflow-y-auto no-scrollbar">
                   {categoriesLoading ? (
-                    <div className="py-10 text-center"><Loader2 className="animate-spin mx-auto text-zinc-200" /></div>
+                    <div className="py-8 text-center"><Loader2 className="animate-spin mx-auto text-zinc-200 dark:text-zinc-700" size={20} /></div>
                   ) : (
-                    <div className="grid grid-cols-1 gap-2">
+                    <div className="flex flex-wrap gap-1.5">
                       {categories.map((cat) => {
                         const Icon = getIconComponent(cat.icono);
                         return (
-                          <div key={cat.id} className="flex items-center justify-between p-3.5 rounded-2xl border bg-zinc-50 border-zinc-100">
-                            <div className="flex items-center gap-3">
-                              <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-white" style={{ color: cat.color }}>
-                                <Icon size={16} />
-                              </div>
-                              <span className="text-xs font-bold text-zinc-800">{cat.nombre}</span>
+                          <div key={cat.id} className="flex items-center gap-1.5 px-2.5 py-1 rounded-full border bg-zinc-50 border-zinc-100 dark:bg-zinc-800 dark:border-zinc-700 group">
+                            <div style={{ color: cat.color }}>
+                              <Icon size={12} />
                             </div>
-                            <div className="flex gap-1">
-                              <button onClick={() => startEditing(cat)} className="p-2 text-zinc-400 hover:text-zinc-900"><Edit3 size={14} /></button>
-                              <button onClick={() => handleDeleteCategory(cat.id)} className="p-2 text-zinc-400 hover:text-rose-500"><Trash2 size={14} /></button>
+                            <span className="text-[10px] font-bold text-zinc-800 dark:text-zinc-200">{cat.nombre}</span>
+                            <div className="flex gap-0.5 ml-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                              <button onClick={() => startEditing(cat)} className="p-0.5 text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100"><Edit3 size={10} /></button>
+                              <button onClick={() => handleDeleteCategory(cat.id)} className="p-0.5 text-zinc-400 hover:text-rose-500"><Trash2 size={10} /></button>
                             </div>
                           </div>
                         );
@@ -720,19 +771,19 @@ export default function SettingsView({
               animate={{ y: 0 }}
               exit={{ y: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="relative w-full max-w-md bg-white rounded-t-[40px] sm:rounded-[40px] shadow-2xl overflow-y-auto max-h-[90vh] custom-scrollbar"
+              className="relative w-full max-w-md bg-white dark:bg-zinc-900 rounded-t-[40px] sm:rounded-[40px] shadow-2xl overflow-y-auto max-h-[90vh] custom-scrollbar"
             >
               <div className="p-8 space-y-8">
                 <div className="flex items-center justify-between">
                   <div className="space-y-1">
-                    <h3 className="font-black text-xl text-zinc-900 tracking-tight">
+                    <h3 className="font-black text-xl text-zinc-900 dark:text-zinc-100 tracking-tight">
                       {editingCategory ? 'Editar Categoría' : 'Nueva Categoría'}
                     </h3>
                     <p className="text-xs text-zinc-400">Personaliza el nombre, icono y color.</p>
                   </div>
                   <button 
                     onClick={() => setIsCategoryModalOpen(false)}
-                    className="w-10 h-10 bg-zinc-50 rounded-full flex items-center justify-center text-zinc-400 hover:text-zinc-900 transition-colors"
+                    className="w-10 h-10 bg-zinc-50 dark:bg-zinc-800 rounded-full flex items-center justify-center text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
                   >
                     <ChevronDown size={20} />
                   </button>
@@ -746,7 +797,7 @@ export default function SettingsView({
                       value={editingCategory ? editName : newCategory}
                       onChange={(e) => editingCategory ? setEditName(e.target.value) : setNewCategory(e.target.value)}
                       placeholder="Ej. Mascotas, Suscripciones..."
-                      className="w-full bg-zinc-50 border border-zinc-100 rounded-2xl px-6 py-4 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-900 transition-all font-medium"
+                      className="w-full bg-zinc-50 dark:bg-zinc-800 border border-zinc-100 dark:border-zinc-700 rounded-2xl px-6 py-4 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-900 dark:focus:ring-zinc-100 transition-all font-medium dark:text-zinc-100"
                       autoFocus
                     />
                   </div>
@@ -777,7 +828,7 @@ export default function SettingsView({
                       <button 
                         type="button"
                         onClick={() => setShowAllIcons(!showAllIcons)}
-                        className="text-[9px] font-black uppercase tracking-widest text-zinc-900 hover:opacity-70 transition-opacity"
+                        className="text-[9px] font-black uppercase tracking-widest text-zinc-900 dark:text-zinc-100 hover:opacity-70 transition-opacity"
                       >
                         {showAllIcons ? 'Ver menos' : 'Ver todos'}
                       </button>
@@ -792,7 +843,7 @@ export default function SettingsView({
                             type="button"
                             onClick={() => editingCategory ? setEditIcon(opt.name) : setSelectedIcon(opt.name)}
                             className={`w-full aspect-square rounded-2xl border flex items-center justify-center transition-all active:scale-90 ${
-                              isSelected ? 'bg-zinc-900 border-zinc-900 text-white shadow-lg shadow-zinc-200' : 'bg-zinc-50 border-zinc-100 text-zinc-400 hover:border-zinc-200'
+                              isSelected ? 'bg-zinc-900 dark:bg-zinc-100 border-zinc-900 dark:border-zinc-100 text-white dark:text-zinc-900 shadow-lg shadow-zinc-200 dark:shadow-none' : 'bg-zinc-50 dark:bg-zinc-800 border-zinc-100 dark:border-zinc-700 text-zinc-400 hover:border-zinc-200 dark:hover:border-zinc-600'
                             }`}
                           >
                             <Icon size={20} />
@@ -805,7 +856,7 @@ export default function SettingsView({
                   <button
                     type="submit"
                     disabled={editingCategory ? !editName.trim() : !newCategory.trim()}
-                    className="w-full py-5 bg-zinc-900 text-white rounded-[28px] font-bold text-sm flex items-center justify-center gap-2 hover:bg-black transition-all active:scale-95 disabled:opacity-50 shadow-xl shadow-zinc-200"
+                    className="w-full py-5 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded-[28px] font-bold text-sm flex items-center justify-center gap-2 hover:bg-black dark:hover:bg-white transition-all active:scale-95 disabled:opacity-50 shadow-xl shadow-zinc-200 dark:shadow-none"
                   >
                     {editingCategory ? (
                       <>
@@ -825,7 +876,7 @@ export default function SettingsView({
       </AnimatePresence>
 
       {/* Seguridad Section */}
-      <div className="space-y-2">
+      <div className="space-y-1.5">
         <SectionHeader 
           id="security" 
           icon={ShieldCheck} 
@@ -840,15 +891,15 @@ export default function SettingsView({
               exit={{ height: 0, opacity: 0 }}
               className="overflow-hidden"
             >
-              <div className="bg-white p-6 rounded-[32px] border border-zinc-100 shadow-sm space-y-6 mt-1 mx-1">
-                <form onSubmit={handleUpdatePassword} className="space-y-5">
-                  <div className="space-y-3">
+              <div className="bg-white dark:bg-zinc-900 p-3 rounded-xl border border-zinc-100 dark:border-zinc-800 shadow-sm space-y-3 mt-1 mx-1">
+                <form onSubmit={handleUpdatePassword} className="space-y-3">
+                  <div className="space-y-2">
                     <input
                       type="password"
                       value={newPassword}
                       onChange={(e) => setNewPassword(e.target.value)}
                       placeholder="Nueva contraseña"
-                      className="w-full bg-zinc-50 border border-zinc-100 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-900 font-mono"
+                      className="w-full bg-zinc-50 dark:bg-zinc-800 border border-zinc-100 dark:border-zinc-700 rounded-lg px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-zinc-900 dark:focus:ring-zinc-100 font-mono dark:text-zinc-100"
                       required
                     />
                     <input
@@ -856,12 +907,12 @@ export default function SettingsView({
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
                       placeholder="Confirmar contraseña"
-                      className="w-full bg-zinc-50 border border-zinc-100 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-900 font-mono"
+                      className="w-full bg-zinc-50 dark:bg-zinc-800 border border-zinc-100 dark:border-zinc-700 rounded-lg px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-zinc-900 dark:focus:ring-zinc-100 font-mono dark:text-zinc-100"
                       required
                     />
                   </div>
-                  <button type="submit" disabled={passwordLoading} className="w-full py-4 bg-zinc-900 text-white rounded-2xl font-bold text-xs active:scale-95 disabled:opacity-50">
-                    {passwordLoading ? <Loader2 className="animate-spin mx-auto" size={16} /> : 'Actualizar Contraseña'}
+                  <button type="submit" disabled={passwordLoading} className="w-full py-2.5 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded-lg font-bold text-[10px] uppercase tracking-widest active:scale-95 disabled:opacity-50">
+                    {passwordLoading ? <Loader2 className="animate-spin mx-auto" size={14} /> : 'Actualizar Contraseña'}
                   </button>
                 </form>
               </div>
@@ -875,18 +926,18 @@ export default function SettingsView({
         <div className="mx-1">
           <button
             onClick={handleInstallClick}
-            className="w-full bg-zinc-900 p-6 rounded-[32px] text-white flex items-center justify-between shadow-xl shadow-zinc-200 active:scale-[0.98] transition-all"
+            className="w-full bg-zinc-900 dark:bg-zinc-100 p-3 rounded-xl text-white dark:text-zinc-900 flex items-center justify-between shadow-md shadow-zinc-200 dark:shadow-none active:scale-[0.98] transition-all"
           >
-            <div className="flex items-center gap-4 text-left">
-              <div className="bg-white/10 p-2.5 rounded-2xl">
-                <Smartphone size={20} />
+            <div className="flex items-center gap-3 text-left">
+              <div className="bg-white/10 dark:bg-zinc-900/10 p-1.5 rounded-lg">
+                <Smartphone size={16} />
               </div>
               <div className="space-y-0.5">
-                <h3 className="font-bold text-sm tracking-tight">Instalar App</h3>
-                <p className="text-[9px] text-zinc-400 uppercase tracking-widest font-bold">Acceso rápido y offline</p>
+                <h3 className="font-bold text-xs tracking-tight">Instalar App</h3>
+                <p className="text-[9px] text-zinc-400 dark:text-zinc-500 uppercase tracking-widest font-bold">Acceso rápido y offline</p>
               </div>
             </div>
-            <Plus size={20} />
+            <Plus size={16} />
           </button>
         </div>
       )}

@@ -78,7 +78,19 @@ export const useExpenses = (userName = 'Usuario A', partnerName = 'Usuario B', p
     let totalDebeB = 0; // What Partner owes User A
     let totalGeneralPEN = 0;
 
+    const now = new Date();
+    const currentMonth = now.getMonth();
+    const currentYear = now.getFullYear();
+
     expenses.forEach(expense => {
+      // Parse YYYY-MM-DD correctly without timezone shift
+      const [year, month, day] = expense.fecha.split('T')[0].split('-');
+      const expenseDate = new Date(year, month - 1, day);
+      
+      if (expenseDate.getMonth() !== currentMonth || expenseDate.getFullYear() !== currentYear) {
+        return; // Skip expenses not in current month
+      }
+
       const montoPEN = parseFloat(expense.monto) * parseFloat(expense.tipo_cambio || 1);
       const pagadorId = expense.pagador_id;
       const factorDeuda = parseFloat(expense.factor_deuda || 0.5);
@@ -171,7 +183,8 @@ export const useExpenses = (userName = 'Usuario A', partnerName = 'Usuario B', p
     searchTerm: '',
     categories: [],
     monthYear: '', // Format: YYYY-MM
-    payerId: ''
+    payerId: '',
+    dateRange: { start: '', end: '' }
   });
 
   const filteredExpenses = useMemo(() => {
@@ -186,8 +199,30 @@ export const useExpenses = (userName = 'Usuario A', partnerName = 'Usuario B', p
         const expenseDate = new Date(expense.fecha);
         matchesMonth = expenseDate.getFullYear() === parseInt(year) && (expenseDate.getMonth() + 1) === parseInt(month);
       }
+
+      let matchesDateRange = true;
+      if (filters.dateRange.start || filters.dateRange.end) {
+        const expenseDate = new Date(expense.fecha);
+        // Reset time to start of day for accurate comparison
+        expenseDate.setHours(0, 0, 0, 0);
+        
+        if (filters.dateRange.start) {
+          const startDate = new Date(filters.dateRange.start);
+          startDate.setHours(0, 0, 0, 0);
+          // Add timezone offset to fix off-by-one day issue
+          startDate.setMinutes(startDate.getMinutes() + startDate.getTimezoneOffset());
+          if (expenseDate < startDate) matchesDateRange = false;
+        }
+        if (filters.dateRange.end) {
+          const endDate = new Date(filters.dateRange.end);
+          endDate.setHours(23, 59, 59, 999);
+          // Add timezone offset to fix off-by-one day issue
+          endDate.setMinutes(endDate.getMinutes() + endDate.getTimezoneOffset());
+          if (expenseDate > endDate) matchesDateRange = false;
+        }
+      }
       
-      return matchesSearch && matchesCategory && matchesMonth && matchesPayer;
+      return matchesSearch && matchesCategory && matchesMonth && matchesPayer && matchesDateRange;
     });
   }, [expenses, filters]);
 

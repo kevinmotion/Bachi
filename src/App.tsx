@@ -12,6 +12,8 @@ import { supabase } from './lib/supabaseClient';
 import { motion, AnimatePresence } from 'motion/react';
 import { Wallet, PlusCircle, History, LayoutDashboard, LogOut, Loader2, PieChart, Plus } from 'lucide-react';
 
+import { useTheme } from './hooks/useTheme';
+
 export default function App() {
   // Comentario para habilitar un nuevo commit
   const [session, setSession] = useState(null);
@@ -19,6 +21,7 @@ export default function App() {
   const [currentView, setCurrentView] = useState('home');
   const [loading, setLoading] = useState(true);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const { theme, setTheme } = useTheme();
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -118,8 +121,8 @@ export default function App() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
-        <Loader2 className="animate-spin text-zinc-900" size={32} />
+      <div className="min-h-screen bg-white dark:bg-zinc-950 flex items-center justify-center">
+        <Loader2 className="animate-spin text-zinc-900 dark:text-zinc-100" size={32} />
       </div>
     );
   }
@@ -131,9 +134,9 @@ export default function App() {
   // Null guard for profile
   if (!profile) {
     return (
-      <div className="min-h-screen bg-white flex flex-col items-center justify-center p-6 text-center space-y-4">
-        <Loader2 className="animate-spin text-zinc-900" size={32} />
-        <p className="text-zinc-500 font-medium animate-pulse">Cargando perfil y sincronizando datos...</p>
+      <div className="min-h-screen bg-white dark:bg-zinc-950 flex flex-col items-center justify-center p-6 text-center space-y-4">
+        <Loader2 className="animate-spin text-zinc-900 dark:text-zinc-100" size={32} />
+        <p className="text-zinc-500 dark:text-zinc-400 font-medium animate-pulse">Cargando perfil y sincronizando datos...</p>
       </div>
     );
   }
@@ -141,16 +144,17 @@ export default function App() {
   const renderView = () => {
     switch (currentView) {
       case 'home':
+        const currentDate = new Intl.DateTimeFormat('es-ES', { weekday: 'long', day: 'numeric', month: 'long' }).format(new Date());
         return (
           <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500 overflow-hidden">
             <header className="flex justify-between items-center">
               <div className="space-y-1">
-                <p className="text-[9px] uppercase tracking-[0.4em] font-bold text-zinc-400">Resumen Mensual</p>
-                <h1 className="font-serif italic text-3xl text-zinc-900 tracking-tight">Hola, {profile?.nombre || 'Usuario'}</h1>
+                <p className="text-[9px] uppercase tracking-[0.4em] font-bold text-zinc-400 dark:text-zinc-500 capitalize">{currentDate}</p>
+                <h1 className="font-serif italic text-3xl text-zinc-900 dark:text-zinc-100 tracking-tight">Hola, {profile?.nombre || 'Usuario'}</h1>
               </div>
               <button 
                 onClick={handleLogout}
-                className="w-10 h-10 bg-white border border-zinc-100 rounded-full flex items-center justify-center text-zinc-400 shadow-sm hover:text-rose-500 transition-colors active:scale-90"
+                className="w-10 h-10 bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 rounded-full flex items-center justify-center text-zinc-400 dark:text-zinc-500 shadow-sm hover:text-rose-500 dark:hover:text-rose-400 transition-colors active:scale-90"
               >
                 <LogOut size={16} />
               </button>
@@ -162,16 +166,16 @@ export default function App() {
             />
 
             <section className="grid grid-cols-2 gap-3">
-              <div className="bg-white p-6 rounded-[32px] border border-zinc-100 shadow-sm space-y-3">
-                <p className="text-[9px] uppercase font-bold tracking-[0.2em] text-zinc-400 font-sans">Gasto Total Mes</p>
+              <div className="bg-white dark:bg-zinc-900 p-6 rounded-[32px] border border-zinc-100 dark:border-zinc-800 shadow-sm space-y-3">
+                <p className="text-[9px] uppercase font-bold tracking-[0.2em] text-zinc-400 dark:text-zinc-500 font-sans">Gasto Total Mes</p>
                 <div className="flex items-baseline gap-1">
-                  <span className="text-xl font-sans font-black text-zinc-900 tracking-tight">S/ {balances.totalGeneralPEN.toFixed(2)}</span>
+                  <span className="text-xl font-sans font-black text-zinc-900 dark:text-zinc-100 tracking-tight">S/ {balances.totalGeneralPEN.toFixed(2)}</span>
                 </div>
               </div>
-              <div className="bg-zinc-900 p-6 rounded-[32px] shadow-xl shadow-zinc-200 space-y-3">
-                <p className="text-[9px] uppercase font-bold tracking-[0.2em] text-zinc-300 font-sans">Mi Gasto</p>
+              <div className="bg-zinc-900 dark:bg-zinc-100 p-6 rounded-[32px] shadow-xl shadow-zinc-200 dark:shadow-none space-y-3">
+                <p className="text-[9px] uppercase font-bold tracking-[0.2em] text-zinc-300 dark:text-zinc-500 font-sans">Mi Gasto</p>
                 <div className="flex items-baseline gap-1">
-                  <span className="text-xl font-sans font-black text-white tracking-tight">S/ {(balances.totals[profile?.id] || 0).toFixed(2)}</span>
+                  <span className="text-xl font-sans font-black text-white dark:text-zinc-900 tracking-tight">S/ {(balances.totals[profile?.id] || 0).toFixed(2)}</span>
                 </div>
               </div>
             </section>
@@ -181,13 +185,13 @@ export default function App() {
         return (
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
             <header className="mb-8 space-y-1">
-              <p className="text-[10px] uppercase tracking-[0.3em] font-bold text-zinc-400">Movimientos</p>
-              <h2 className="font-serif italic text-3xl text-zinc-900">Historial</h2>
+              <p className="text-[10px] uppercase tracking-[0.3em] font-bold text-zinc-400 dark:text-zinc-500">Movimientos</p>
+              <h2 className="font-serif italic text-3xl text-zinc-900 dark:text-zinc-100">Historial</h2>
             </header>
 
             <section className="space-y-6">
               {isLoading ? (
-                <div className="p-12 text-center animate-pulse text-zinc-400 italic bg-white rounded-[40px] border border-zinc-100">
+                <div className="p-12 text-center animate-pulse text-zinc-400 dark:text-zinc-500 italic bg-white dark:bg-zinc-900 rounded-[40px] border border-zinc-100 dark:border-zinc-800">
                   Cargando transacciones...
                 </div>
               ) : (
@@ -208,8 +212,8 @@ export default function App() {
         return (
           <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <header className="space-y-1">
-              <p className="text-[10px] uppercase tracking-[0.3em] font-bold text-zinc-400">Visualización</p>
-              <h2 className="font-serif italic text-3xl text-zinc-900">Análisis</h2>
+              <p className="text-[10px] uppercase tracking-[0.3em] font-bold text-zinc-400 dark:text-zinc-500">Visualización</p>
+              <h2 className="font-serif italic text-3xl text-zinc-900 dark:text-zinc-100">Análisis</h2>
             </header>
             <AnalyticsView 
               expenses={filteredExpenses} 
@@ -228,6 +232,8 @@ export default function App() {
             onUpdateCategory={updateCategory}
             onDeleteCategory={deleteCategory}
             categoriesLoading={categoriesLoading}
+            theme={theme}
+            setTheme={setTheme}
           />
         );
       default:
@@ -251,7 +257,7 @@ export default function App() {
       }
     >
       {(expensesError || categoriesError) && (
-        <div className="mb-8 p-6 bg-rose-50 border border-rose-100 text-rose-600 rounded-[32px] text-sm shadow-sm animate-in fade-in slide-in-from-top-4">
+        <div className="mb-8 p-6 bg-rose-50 dark:bg-rose-950/30 border border-rose-100 dark:border-rose-900 text-rose-600 dark:text-rose-400 rounded-[32px] text-sm shadow-sm animate-in fade-in slide-in-from-top-4">
           <p className="font-bold mb-1">Error Técnico:</p>
           <p className="font-mono text-xs">{expensesError || categoriesError}</p>
         </div>

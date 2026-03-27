@@ -27,7 +27,7 @@ export default function Layout({
   };
 
   return (
-    <div className="min-h-screen bg-white pb-32">
+    <div className="min-h-screen bg-white dark:bg-zinc-950 pb-32 transition-colors duration-300">
       <main className="max-w-2xl mx-auto p-6 md:p-8">
         <AnimatePresence mode="wait">
           <motion.div
@@ -48,14 +48,14 @@ export default function Layout({
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={handleFabClick}
-          className="fixed bottom-24 right-6 w-16 h-16 bg-zinc-900 text-white rounded-full flex items-center justify-center shadow-2xl shadow-zinc-400 z-40"
+          className="fixed bottom-24 right-6 w-16 h-16 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded-full flex items-center justify-center shadow-2xl shadow-zinc-400 dark:shadow-none z-40 transition-colors"
         >
           <Plus size={28} />
         </motion.button>
       )}
 
       {/* Bottom Nav */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-xl border-t border-zinc-100 px-6 py-4 z-50">
+      <nav className="fixed bottom-0 left-0 right-0 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-xl border-t border-zinc-100 dark:border-zinc-800 px-6 py-4 z-50 transition-colors">
         <div className="max-w-2xl mx-auto flex justify-around items-center">
           {navItems.map((item) => {
             const Icon = item.icon;
@@ -65,10 +65,10 @@ export default function Layout({
                 key={item.id}
                 onClick={() => onViewChange(item.id)}
                 className={`relative flex flex-col items-center gap-1.5 transition-all active:scale-95 ${
-                  isActive ? 'text-zinc-900' : 'text-zinc-400 hover:text-zinc-600'
+                  isActive ? 'text-zinc-900 dark:text-zinc-100' : 'text-zinc-400 dark:text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-400'
                 }`}
               >
-                <div className={`p-2 rounded-2xl transition-all ${isActive ? 'bg-zinc-50' : ''}`}>
+                <div className={`p-2 rounded-2xl transition-all ${isActive ? 'bg-zinc-50 dark:bg-zinc-900' : ''}`}>
                   <Icon size={22} strokeWidth={isActive ? 2.5 : 2} />
                 </div>
                 <span className={`text-[10px] font-bold uppercase tracking-widest transition-all ${isActive ? 'opacity-100' : 'opacity-60'}`}>
@@ -77,7 +77,7 @@ export default function Layout({
                 {isActive && (
                   <motion.div
                     layoutId="activeNav"
-                    className="absolute -bottom-1 w-1 h-1 bg-zinc-900 rounded-full"
+                    className="absolute -bottom-1 w-1 h-1 bg-zinc-900 dark:bg-zinc-100 rounded-full"
                   />
                 )}
               </button>
@@ -95,22 +95,22 @@ export default function Layout({
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsDrawerOpen(false)}
-              className="fixed inset-0 bg-zinc-900/40 backdrop-blur-sm z-[60]"
+              className="fixed inset-0 bg-zinc-900/40 dark:bg-black/60 backdrop-blur-sm z-[60]"
             />
             <motion.div
               initial={{ y: "-100%" }}
               animate={{ y: 0 }}
               exit={{ y: "-100%" }}
               transition={{ type: "spring", damping: 30, stiffness: 300 }}
-              className="fixed top-0 left-0 right-0 md:max-w-lg md:mx-auto bg-white z-[70] max-h-[95vh] overflow-y-auto no-scrollbar shadow-2xl rounded-b-[40px] md:rounded-b-[32px]"
+              className="fixed top-0 left-0 right-0 md:max-w-lg md:mx-auto bg-white dark:bg-zinc-950 z-[70] max-h-[95vh] overflow-y-auto no-scrollbar shadow-2xl rounded-b-[40px] md:rounded-b-[32px] border-b border-zinc-100 dark:border-zinc-800"
             >
               <div className="p-5 pt-6 relative">
                 <div className="absolute top-3 left-1/2 -translate-x-1/2">
-                  <div className="w-10 h-1 bg-zinc-100 rounded-full" />
+                  <div className="w-10 h-1 bg-zinc-100 dark:bg-zinc-800 rounded-full" />
                 </div>
                 <button 
                   onClick={() => setIsDrawerOpen(false)}
-                  className="absolute top-3 right-5 w-8 h-8 bg-zinc-50 rounded-full flex items-center justify-center text-zinc-400 hover:text-zinc-900 transition-colors z-10"
+                  className="absolute top-3 right-5 w-8 h-8 bg-zinc-50 dark:bg-zinc-900 rounded-full flex items-center justify-center text-zinc-400 dark:text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors z-10"
                 >
                   <X size={16} />
                 </button>
