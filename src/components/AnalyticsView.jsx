@@ -184,24 +184,24 @@ export default function AnalyticsView({ expenses, spaceUsers = [], categories = 
       className="space-y-8 pb-32"
     >
       {/* Month Selector */}
-      <div className="flex items-center justify-between bg-white dark:bg-zinc-950 p-2 rounded-2xl border border-zinc-100 dark:border-zinc-800 shadow-sm">
+      <div className="flex items-center justify-between bg-white dark:bg-zinc-950 p-1.5 rounded-xl border border-zinc-100 dark:border-zinc-800 shadow-sm">
         <button 
           onClick={handlePrevMonth}
-          className="p-3 hover:bg-zinc-50 dark:hover:bg-zinc-900 rounded-xl transition-colors text-zinc-400 dark:text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100"
+          className="p-2 hover:bg-zinc-50 dark:hover:bg-zinc-900 rounded-lg transition-colors text-zinc-400 dark:text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100"
         >
-          <ChevronLeft size={20} />
+          <ChevronLeft size={16} />
         </button>
-        <div className="flex items-center gap-2">
-          <Calendar size={16} className="text-zinc-400 dark:text-zinc-500" />
-          <span className="font-bold text-zinc-900 dark:text-zinc-100 capitalize text-sm">
+        <div className="flex items-center gap-1.5">
+          <Calendar size={12} className="text-zinc-400 dark:text-zinc-500" />
+          <span className="font-bold text-zinc-900 dark:text-zinc-100 capitalize text-xs">
             {monthName}
           </span>
         </div>
         <button 
           onClick={handleNextMonth}
-          className="p-3 hover:bg-zinc-50 dark:hover:bg-zinc-900 rounded-xl transition-colors text-zinc-400 dark:text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100"
+          className="p-2 hover:bg-zinc-50 dark:hover:bg-zinc-900 rounded-lg transition-colors text-zinc-400 dark:text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100"
         >
-          <ChevronRight size={20} />
+          <ChevronRight size={16} />
         </button>
       </div>
 

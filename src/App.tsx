@@ -161,8 +161,9 @@ export default function App() {
             </header>
 
             <BalanceCard 
-              netBalance={balances.netBalance} 
+              netBalance={isLoading ? null : balances.netBalance} 
               spaceUsers={spaceUsers}
+              isLoading={isLoading}
             />
 
             <section className="grid grid-cols-2 gap-3">
