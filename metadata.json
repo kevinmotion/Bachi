@@ -1,0 +1,5 @@
+{
+  "name": "Gestor de Finanzas",
+  "description": "Aplicación para gestionar finanzas personales con conversión de moneda.",
+  "requestFramePermissions": []
+}
