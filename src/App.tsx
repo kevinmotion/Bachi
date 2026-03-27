@@ -185,16 +185,26 @@ export default function App() {
             />
 
             <section className="grid grid-cols-2 gap-3">
-              <div className="bg-white dark:bg-zinc-900 p-6 rounded-[32px] border border-zinc-100 dark:border-zinc-800 shadow-sm space-y-3">
-                <p className="text-[9px] uppercase font-bold tracking-[0.2em] text-zinc-400 dark:text-zinc-500 font-sans">Gasto Total Mes</p>
-                <div className="flex items-baseline gap-1">
-                  <span className="text-xl font-sans font-black text-zinc-900 dark:text-zinc-100 tracking-tight">S/ {balances.totalGeneralPEN.toFixed(2)}</span>
+              <div className="bg-white dark:bg-zinc-950 p-4 md:p-6 rounded-[24px] md:rounded-[32px] border border-zinc-100 dark:border-zinc-800 shadow-sm flex flex-col items-center justify-center text-center gap-0 h-[90px]">
+                <div className="flex items-center justify-center opacity-60 text-zinc-500 dark:text-zinc-400">
+                  <p className="text-[7px] md:text-[8px] uppercase font-medium tracking-[0.15em] leading-tight">Gasto Total Mes</p>
+                </div>
+                <div className="flex items-start justify-center gap-0.5">
+                  <span className="text-[10px] md:text-xs font-medium opacity-40 mt-[5px]">S/</span>
+                  <p className="text-[25px] font-sans font-black text-zinc-900 dark:text-zinc-100 tracking-tighter break-words leading-[25px] mt-[5px] mb-[3px]">
+                    {balances.totalGeneralPEN.toFixed(2)}
+                  </p>
                 </div>
               </div>
-              <div className="bg-zinc-900 dark:bg-zinc-100 p-6 rounded-[32px] shadow-xl shadow-zinc-200 dark:shadow-none space-y-3">
-                <p className="text-[9px] uppercase font-bold tracking-[0.2em] text-zinc-300 dark:text-zinc-500 font-sans">Mi Gasto</p>
-                <div className="flex items-baseline gap-1">
-                  <span className="text-xl font-sans font-black text-white dark:text-zinc-900 tracking-tight">S/ {(balances.totals[profile?.id] || 0).toFixed(2)}</span>
+              <div className="bg-white dark:bg-zinc-950 p-4 md:p-6 rounded-[24px] md:rounded-[32px] border border-[#f4f4f5] dark:border-zinc-800 shadow-sm flex flex-col items-center justify-center text-center gap-0 h-[90px]">
+                <div className="flex items-center justify-center text-[#71717b] dark:text-zinc-400">
+                  <p className="text-[7px] md:text-[8px] uppercase font-medium tracking-[0.15em] leading-tight">Mi Gasto</p>
+                </div>
+                <div className="flex items-start justify-center gap-0.5">
+                  <span className="text-[10px] md:text-xs font-medium text-[#18181b] dark:text-zinc-400 opacity-40 mt-[5px]">S/</span>
+                  <p className="text-[25px] font-sans font-black text-[#18181b] dark:text-zinc-100 tracking-tighter break-words leading-[25px] mt-[5px] mb-[3px]">
+                    {(balances.totals[profile?.id] || 0).toFixed(2)}
+                  </p>
                 </div>
               </div>
             </section>

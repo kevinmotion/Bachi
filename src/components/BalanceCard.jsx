@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowUpRight, ArrowDownLeft } from 'lucide-react';
+import { Wallet } from 'lucide-react';
 
 export default function BalanceCard({ 
   netBalance, 
@@ -14,29 +14,42 @@ export default function BalanceCard({
   const beneficiary = partnerOwesMe ? userA : userB;
 
   return (
-    <div className="bg-white dark:bg-zinc-950 p-10 rounded-[32px] border border-zinc-100 dark:border-zinc-800 shadow-sm flex flex-col items-center text-center space-y-6">
-      <div className="space-y-2 pt-4">
+    <div className="bg-gradient-to-br from-zinc-50 to-white dark:from-zinc-900/40 dark:to-zinc-950 p-[25px] rounded-[40px] border border-zinc-200 dark:border-zinc-800 shadow-sm flex flex-col items-center justify-center text-center gap-4 relative overflow-hidden group h-[200px] mb-[20px]">
+      <div className="absolute top-4 right-4 opacity-[0.03] dark:opacity-[0.02] group-hover:scale-110 transition-transform pointer-events-none">
+        <Wallet size={120} />
+      </div>
+
+      <div className="relative z-10 flex items-center justify-center opacity-60">
+        <p className="text-[9px] md:text-[10px] uppercase font-medium tracking-[0.2em]">Balance de Cuentas</p>
+      </div>
+
+      <div className="relative z-10 flex items-start justify-center gap-1.5">
         {isLoading ? (
           <div className="h-16 w-48 bg-zinc-100 dark:bg-zinc-800 rounded-2xl animate-pulse" />
         ) : (
-          <h2 className={`text-6xl md:text-7xl font-sans font-black tracking-tighter leading-none ${
-            isBalanced ? 'text-zinc-300 dark:text-zinc-700' : 'text-zinc-900 dark:text-zinc-100'
-          }`}>
-            S/ {Math.abs(netBalance || 0).toFixed(2)}
-          </h2>
+          <>
+            <span className="text-base md:text-lg font-medium opacity-40 mt-1.5 md:mt-2">S/</span>
+            <h2 className={`text-[64px] font-sans font-black tracking-tighter leading-[64px] ${
+              isBalanced ? 'text-zinc-300 dark:text-zinc-700' : 'text-zinc-900 dark:text-zinc-100'
+            }`}>
+              {Math.abs(netBalance || 0).toLocaleString('es-PE', { minimumFractionDigits: 2 })}
+            </h2>
+          </>
         )}
-        
-        <div className="flex flex-col items-center">
-          {!isLoading && !isBalanced ? (
-            <div className="flex items-center gap-2 text-zinc-500 dark:text-zinc-400">
-              <span className="text-[11px] uppercase font-bold tracking-[0.2em] font-sans">A favor de</span>
-              <span className="text-sm font-sans font-bold text-zinc-900 dark:text-zinc-100 underline underline-offset-4 decoration-zinc-200 dark:decoration-zinc-800">{beneficiary}</span>
-            </div>
-          ) : !isLoading && (
-            <span className="text-[11px] uppercase font-bold tracking-[0.2em] text-zinc-400 dark:text-zinc-500 font-sans">Están a mano</span>
+      </div>
+      
+      {!isLoading && (
+        <div className="relative z-10 flex items-center justify-center gap-1 opacity-80">
+          {!isBalanced ? (
+            <>
+              <span className="text-[10px] uppercase font-bold tracking-[0.1em] text-zinc-400 dark:text-zinc-500">A favor de</span>
+              <span className="text-[11px] font-bold text-zinc-900 dark:text-zinc-100">{beneficiary}</span>
+            </>
+          ) : (
+            <span className="text-[10px] uppercase font-bold tracking-[0.1em] text-zinc-400 dark:text-zinc-500">Están a mano</span>
           )}
         </div>
-      </div>
+      )}
     </div>
   );
 }

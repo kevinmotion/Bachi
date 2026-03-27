@@ -15,9 +15,12 @@ export default function Layout({
   const isDrawerOpen = externalIsDrawerOpen !== undefined ? externalIsDrawerOpen : internalIsDrawerOpen;
   const setIsDrawerOpen = onDrawerChange || setInternalIsDrawerOpen;
 
-  const navItems = [
+  const navItemsLeft = [
     { id: 'home', icon: Home, label: 'Inicio' },
     { id: 'registry', icon: List, label: 'Historial' },
+  ];
+
+  const navItemsRight = [
     { id: 'analytics', icon: PieChart, label: 'Análisis' },
     { id: 'settings', icon: Settings, label: 'Ajustes' },
   ];
@@ -26,8 +29,27 @@ export default function Layout({
     setIsDrawerOpen(true);
   };
 
+  const NavItem = ({ item }) => {
+    const Icon = item.icon;
+    const isActive = currentView === item.id;
+    return (
+      <button
+        key={item.id}
+        onClick={() => onViewChange(item.id)}
+        className={`flex-1 flex flex-col items-center justify-center h-full gap-[2px] transition-all active:scale-95 ${
+          isActive ? 'text-zinc-900 dark:text-zinc-100' : 'text-zinc-400 dark:text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-400'
+        }`}
+      >
+        <Icon size={20} strokeWidth={isActive ? 2.5 : 2} />
+        <span className="text-[10px] font-medium">
+          {item.label}
+        </span>
+      </button>
+    );
+  };
+
   return (
-    <div className="min-h-screen bg-white dark:bg-zinc-950 pb-32 transition-colors duration-300">
+    <div className="min-h-screen bg-white dark:bg-zinc-950 pb-24 transition-colors duration-300">
       <main className="max-w-2xl mx-auto p-6 md:p-8">
         <AnimatePresence mode="wait">
           <motion.div
@@ -42,47 +64,26 @@ export default function Layout({
         </AnimatePresence>
       </main>
 
-      {/* FAB */}
-      {fabContent && currentView !== 'settings' && (
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={handleFabClick}
-          className="fixed bottom-24 right-6 w-16 h-16 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded-full flex items-center justify-center shadow-2xl shadow-zinc-400 dark:shadow-none z-40 transition-colors"
-        >
-          <Plus size={28} />
-        </motion.button>
-      )}
-
       {/* Bottom Nav */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-xl border-t border-zinc-100 dark:border-zinc-800 px-6 py-4 z-50 transition-colors">
-        <div className="max-w-2xl mx-auto flex justify-around items-center">
-          {navItems.map((item) => {
-            const Icon = item.icon;
-            const isActive = currentView === item.id;
-            return (
-              <button
-                key={item.id}
-                onClick={() => onViewChange(item.id)}
-                className={`relative flex flex-col items-center gap-1.5 transition-all active:scale-95 ${
-                  isActive ? 'text-zinc-900 dark:text-zinc-100' : 'text-zinc-400 dark:text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-400'
-                }`}
-              >
-                <div className={`p-2 rounded-2xl transition-all ${isActive ? 'bg-zinc-50 dark:bg-zinc-900' : ''}`}>
-                  <Icon size={22} strokeWidth={isActive ? 2.5 : 2} />
-                </div>
-                <span className={`text-[10px] font-bold uppercase tracking-widest transition-all ${isActive ? 'opacity-100' : 'opacity-60'}`}>
-                  {item.label}
-                </span>
-                {isActive && (
-                  <motion.div
-                    layoutId="activeNav"
-                    className="absolute -bottom-1 w-1 h-1 bg-zinc-900 dark:bg-zinc-100 rounded-full"
-                  />
-                )}
-              </button>
-            );
-          })}
+      <nav className="fixed bottom-0 left-0 right-0 bg-white dark:bg-zinc-950 border-t border-zinc-100 dark:border-zinc-800 z-50 h-[60px] transition-colors">
+        <div className="max-w-md mx-auto h-full flex justify-between items-center px-2">
+          {navItemsLeft.map((item) => (
+            <NavItem key={item.id} item={item} />
+          ))}
+
+          {/* Center FAB */}
+          <div className="flex-1 flex justify-center h-full relative">
+            <button
+              onClick={handleFabClick}
+              className="absolute -top-6 w-[48px] h-[48px] bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded-full flex items-center justify-center shadow-lg hover:scale-105 active:scale-95 transition-transform"
+            >
+              <Plus size={24} strokeWidth={2.5} />
+            </button>
+          </div>
+
+          {navItemsRight.map((item) => (
+            <NavItem key={item.id} item={item} />
+          ))}
         </div>
       </nav>
 
