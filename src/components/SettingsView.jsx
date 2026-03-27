@@ -212,9 +212,17 @@ export default function SettingsView({
 
   useEffect(() => {
     const getUserId = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
-        setAuthUserId(user.id);
+      try {
+        const { data: { user }, error } = await supabase.auth.getUser();
+        if (error) {
+          console.error("Error getting user:", error);
+          return;
+        }
+        if (user) {
+          setAuthUserId(user.id);
+        }
+      } catch (err) {
+        console.error("Unexpected error getting user:", err);
       }
     };
     getUserId();

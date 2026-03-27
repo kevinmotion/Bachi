@@ -24,13 +24,31 @@ export default function App() {
   const { theme, setTheme } = useTheme();
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      if (session) fetchProfile(session.user.id, session.user.email || '');
-      else setLoading(false);
-    });
+    const initSession = async () => {
+      try {
+        const { data: { session }, error } = await supabase.auth.getSession();
+        if (error) {
+          console.error("Session error:", error);
+          if (error.message.includes("Refresh Token Not Found") || error.message.includes("Invalid Refresh Token")) {
+            await supabase.auth.signOut();
+          }
+          setSession(null);
+          setLoading(false);
+          return;
+        }
+        setSession(session);
+        if (session) fetchProfile(session.user.id, session.user.email || '');
+        else setLoading(false);
+      } catch (err) {
+        console.error("Unexpected session error:", err);
+        setSession(null);
+        setLoading(false);
+      }
+    };
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    initSession();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
       setSession(session);
       if (session) fetchProfile(session.user.id, session.user.email || '');
       else {

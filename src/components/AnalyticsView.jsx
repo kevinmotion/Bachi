@@ -206,54 +206,54 @@ export default function AnalyticsView({ expenses, spaceUsers = [], categories = 
       </div>
 
       {/* KPI Section - Premium Look */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <motion.div variants={itemVariants} className="bg-zinc-900 dark:bg-zinc-100 p-6 rounded-[32px] text-white dark:text-zinc-900 relative overflow-hidden group shadow-xl shadow-zinc-200 dark:shadow-none">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
+        <motion.div variants={itemVariants} className="col-span-1 row-span-2 md:row-span-1 bg-zinc-900 dark:bg-zinc-100 p-5 md:p-6 rounded-[32px] text-white dark:text-zinc-900 relative overflow-hidden group shadow-xl shadow-zinc-200 dark:shadow-none flex flex-col justify-between">
           <div className="absolute top-0 right-0 p-4 opacity-10 dark:opacity-5 group-hover:scale-110 transition-transform">
             <Activity size={64} />
           </div>
           <div className="relative z-10 space-y-4">
             <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 dark:bg-emerald-500 animate-pulse" />
+              <span className="w-2 h-2 rounded-full bg-emerald-400 dark:bg-emerald-500 animate-pulse shrink-0" />
               <p className="text-[10px] uppercase font-bold tracking-[0.2em] text-zinc-400 dark:text-zinc-500">Total Mes</p>
             </div>
             <div className="space-y-1">
-              <p className="text-3xl font-sans font-black tracking-tight">S/ {stats.totalThisMonth.toLocaleString('es-PE', { minimumFractionDigits: 2 })}</p>
-              <div className="flex items-center gap-1.5">
+              <p className="text-2xl md:text-3xl font-sans font-black tracking-tight break-words">S/ {stats.totalThisMonth.toLocaleString('es-PE', { minimumFractionDigits: 2 })}</p>
+              <div className="flex items-center gap-1.5 flex-wrap">
                 {stats.monthVariation > 0 ? (
-                  <ArrowUpRight size={14} className="text-rose-400 dark:text-rose-500" />
+                  <ArrowUpRight size={16} className="text-rose-400 dark:text-rose-500 shrink-0" />
                 ) : (
-                  <ArrowDownRight size={14} className="text-emerald-400 dark:text-emerald-500" />
+                  <ArrowDownRight size={16} className="text-emerald-400 dark:text-emerald-500 shrink-0" />
                 )}
-                <span className={`text-[10px] font-bold ${stats.monthVariation > 0 ? 'text-rose-400 dark:text-rose-500' : 'text-emerald-400 dark:text-emerald-500'}`}>
-                  {Math.abs(stats.monthVariation).toFixed(1)}% vs mes anterior
+                <span className={`text-[11px] md:text-xs font-bold ${stats.monthVariation > 0 ? 'text-rose-400 dark:text-rose-500' : 'text-emerald-400 dark:text-emerald-500'}`}>
+                  {Math.abs(stats.monthVariation).toFixed(1)}%
                 </span>
               </div>
             </div>
           </div>
         </motion.div>
 
-        <motion.div variants={itemVariants} className="bg-white dark:bg-zinc-950 p-6 rounded-[32px] border border-zinc-100 dark:border-zinc-800 shadow-sm space-y-4">
+        <motion.div variants={itemVariants} className="col-span-1 bg-white dark:bg-zinc-950 p-4 md:p-6 rounded-[24px] md:rounded-[32px] border border-zinc-100 dark:border-zinc-800 shadow-sm flex flex-col justify-center space-y-2 md:space-y-4">
           <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded-lg bg-zinc-50 dark:bg-zinc-900 flex items-center justify-center text-zinc-400 dark:text-zinc-500">
+            <div className="w-6 h-6 rounded-lg bg-zinc-50 dark:bg-zinc-900 flex items-center justify-center text-zinc-400 dark:text-zinc-500 shrink-0">
               <Zap size={12} />
             </div>
-            <p className="text-[10px] uppercase font-bold tracking-[0.2em] text-zinc-400 dark:text-zinc-500">Promedio Diario</p>
+            <p className="text-[10px] uppercase font-bold tracking-[0.1em] md:tracking-[0.2em] text-zinc-400 dark:text-zinc-500 leading-tight">Promedio Diario</p>
           </div>
-          <p className="text-3xl font-sans font-black text-zinc-900 dark:text-zinc-100 tracking-tight">S/ {stats.dailyAvg.toFixed(2)}</p>
-          <div className="h-1 w-full bg-zinc-50 dark:bg-zinc-900 rounded-full overflow-hidden">
+          <p className="text-lg sm:text-xl md:text-3xl font-sans font-black text-zinc-900 dark:text-zinc-100 tracking-tight break-words leading-none">S/ {stats.dailyAvg.toFixed(2)}</p>
+          <div className="h-1 w-full bg-zinc-50 dark:bg-zinc-900 rounded-full overflow-hidden hidden md:block">
             <div className="h-full bg-zinc-900 dark:bg-zinc-100 rounded-full" style={{ width: '65%' }} />
           </div>
         </motion.div>
 
-        <motion.div variants={itemVariants} className="bg-white dark:bg-zinc-950 p-6 rounded-[32px] border border-zinc-100 dark:border-zinc-800 shadow-sm space-y-4">
+        <motion.div variants={itemVariants} className="col-span-1 bg-white dark:bg-zinc-950 p-4 md:p-6 rounded-[24px] md:rounded-[32px] border border-zinc-100 dark:border-zinc-800 shadow-sm flex flex-col justify-center space-y-2 md:space-y-4">
           <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded-lg bg-zinc-50 dark:bg-zinc-900 flex items-center justify-center text-zinc-400 dark:text-zinc-500">
+            <div className="w-6 h-6 rounded-lg bg-zinc-50 dark:bg-zinc-900 flex items-center justify-center text-zinc-400 dark:text-zinc-500 shrink-0">
               <Target size={12} />
             </div>
-            <p className="text-[10px] uppercase font-bold tracking-[0.2em] text-zinc-400 dark:text-zinc-500">Mayor Gasto</p>
+            <p className="text-[10px] uppercase font-bold tracking-[0.1em] md:tracking-[0.2em] text-zinc-400 dark:text-zinc-500 leading-tight">Mayor Gasto</p>
           </div>
-          <p className="text-3xl font-sans font-black text-zinc-900 dark:text-zinc-100 tracking-tight">S/ {stats.maxExpense.toFixed(2)}</p>
-          <p className="text-[10px] text-zinc-400 dark:text-zinc-500 font-medium italic">En un solo movimiento</p>
+          <p className="text-lg sm:text-xl md:text-3xl font-sans font-black text-zinc-900 dark:text-zinc-100 tracking-tight break-words leading-none">S/ {stats.maxExpense.toFixed(2)}</p>
+          <p className="text-[10px] text-zinc-400 dark:text-zinc-500 font-medium italic hidden md:block">En un solo movimiento</p>
         </motion.div>
       </div>
 
