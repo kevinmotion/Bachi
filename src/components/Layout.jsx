@@ -102,7 +102,7 @@ export default function Layout({
               animate={{ y: 0 }}
               exit={{ y: "-100%" }}
               transition={{ type: "spring", damping: 30, stiffness: 300 }}
-              className="fixed top-0 left-0 right-0 bg-white z-[70] max-h-[95vh] overflow-y-auto no-scrollbar shadow-2xl rounded-b-[40px]"
+              className="fixed top-0 left-0 right-0 md:max-w-lg md:mx-auto bg-white z-[70] max-h-[95vh] overflow-y-auto no-scrollbar shadow-2xl rounded-b-[40px] md:rounded-b-[32px]"
             >
               <div className="p-5 pt-6 relative">
                 <div className="absolute top-3 left-1/2 -translate-x-1/2">
