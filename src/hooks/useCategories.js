@@ -30,16 +30,20 @@ export const useCategories = (profile) => {
   }, [espacioId]);
 
   const addCategory = async (nombre, icono = 'ShoppingBag', color = '#18181b') => {
-    if (!profile || !profile.espacio_shared_id) throw new Error("Perfil no cargado");
+    // Validar que el perfil exista antes de intentar guardar
+    if (!profile || !profile.espacio_shared_id) {
+      throw new Error("Error: No se ha cargado tu perfil o espacio compartido.");
+    }
+
     setIsLoading(true);
     try {
       const { data, error: supabaseError } = await supabase
         .from('categorias')
         .insert([{ 
           nombre: nombre.trim(), 
-          espacio_id: profile.espacio_shared_id,
           icono: icono,
-          color: color
+          color: color,
+          espacio_id: profile.espacio_shared_id // <-- ESTA ES LA LÍNEA CRÍTICA AÑADIDA
         }])
         .select();
 
@@ -47,6 +51,7 @@ export const useCategories = (profile) => {
         console.error("[useCategories] Error al insertar categoría:", supabaseError);
         throw supabaseError;
       }
+      
       setCategories(prev => [...prev, data[0]]);
       return data[0];
     } catch (err) {
