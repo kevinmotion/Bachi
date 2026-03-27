@@ -32,7 +32,7 @@ export default function LoginView() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F5F5F0] flex flex-col items-center justify-center p-6 animate-in fade-in duration-700">
+    <div className="min-h-screen bg-white flex flex-col items-center justify-center p-6 animate-in fade-in duration-700">
       <div className="w-full max-w-md space-y-8">
         <div className="text-center space-y-4">
           <div className="w-20 h-20 bg-zinc-900 rounded-[32px] flex items-center justify-center mx-auto shadow-2xl shadow-zinc-200">

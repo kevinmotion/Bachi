@@ -118,7 +118,7 @@ export default function App() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#F5F5F0] flex items-center justify-center">
+      <div className="min-h-screen bg-white flex items-center justify-center">
         <Loader2 className="animate-spin text-zinc-900" size={32} />
       </div>
     );
@@ -131,7 +131,7 @@ export default function App() {
   // Null guard for profile
   if (!profile) {
     return (
-      <div className="min-h-screen bg-[#F5F5F0] flex flex-col items-center justify-center p-6 text-center space-y-4">
+      <div className="min-h-screen bg-white flex flex-col items-center justify-center p-6 text-center space-y-4">
         <Loader2 className="animate-spin text-zinc-900" size={32} />
         <p className="text-zinc-500 font-medium animate-pulse">Cargando perfil y sincronizando datos...</p>
       </div>

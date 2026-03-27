@@ -7,8 +7,8 @@ export default function Layout({
   currentView, 
   onViewChange, 
   fabContent = null,
-  isDrawerOpen: externalIsDrawerOpen = undefined,
-  onDrawerChange = undefined
+  isDrawerOpen: externalIsDrawerOpen,
+  onDrawerChange
 }) {
   const [internalIsDrawerOpen, setInternalIsDrawerOpen] = useState(false);
   
@@ -27,19 +27,8 @@ export default function Layout({
   };
 
   return (
-    <div className={`min-h-screen pb-32 transition-colors duration-500 ${currentView === 'home' ? 'bg-zinc-900' : 'bg-[#FDFDFB]'}`}>
-      {currentView === 'home' && (
-        <div className="fixed inset-0 z-0">
-          <img 
-            src="https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1920&q=80" 
-            alt="Relaxing Landscape" 
-            className="w-full h-full object-cover opacity-60"
-            referrerPolicy="no-referrer"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/40" />
-        </div>
-      )}
-      <main className="relative z-10 max-w-2xl mx-auto p-6 md:p-8">
+    <div className="min-h-screen bg-white pb-32">
+      <main className="max-w-2xl mx-auto p-6 md:p-8">
         <AnimatePresence mode="wait">
           <motion.div
             key={currentView}
