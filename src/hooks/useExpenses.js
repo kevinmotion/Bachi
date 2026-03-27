@@ -87,9 +87,10 @@ export const useExpenses = (userName = 'Usuario A', partnerName = 'Usuario B', p
       const [year, month, day] = expense.fecha.split('T')[0].split('-');
       const expenseDate = new Date(year, month - 1, day);
       
-      if (expenseDate.getMonth() !== currentMonth || expenseDate.getFullYear() !== currentYear) {
-        return; // Skip expenses not in current month
-      }
+      // Removed monthly filtering to calculate total balance
+      // if (expenseDate.getMonth() !== currentMonth || expenseDate.getFullYear() !== currentYear) {
+      //   return; // Skip expenses not in current month
+      // }
 
       const montoPEN = parseFloat(expense.monto) * parseFloat(expense.tipo_cambio || 1);
       const pagadorId = expense.pagador_id;

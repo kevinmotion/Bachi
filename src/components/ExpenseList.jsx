@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { DayPicker } from 'react-day-picker';
@@ -104,17 +104,23 @@ export default function ExpenseList({
     return <IconComponent size={12} />;
   };
 
-  const groupedExpenses = expenses.reduce((acc, expense) => {
-    const date = new Date(expense.fecha);
-    const monthYear = format(date, 'MMMM yyyy', { locale: es });
-    const capitalizedMonthYear = monthYear.charAt(0).toUpperCase() + monthYear.slice(1);
-    
-    if (!acc[capitalizedMonthYear]) {
-      acc[capitalizedMonthYear] = [];
-    }
-    acc[capitalizedMonthYear].push(expense);
-    return acc;
-  }, {});
+  const groupedExpenses = useMemo(() => {
+    const groups = expenses.reduce((acc, expense) => {
+      const date = new Date(expense.fecha);
+      const monthYear = format(date, 'MMMM yyyy', { locale: es });
+      const capitalizedMonthYear = monthYear.charAt(0).toUpperCase() + monthYear.slice(1);
+      
+      if (!acc[capitalizedMonthYear]) {
+        acc[capitalizedMonthYear] = [];
+      }
+      acc[capitalizedMonthYear].push(expense);
+      return acc;
+    }, {});
+
+    return Object.entries(groups).sort((a, b) => {
+      return new Date(b[1][0].fecha) - new Date(a[1][0].fecha);
+    });
+  }, [expenses]);
 
   return (
     <div className="space-y-6">
@@ -280,7 +286,7 @@ export default function ExpenseList({
           </div>
         ) : (
           <div className="space-y-6">
-            {Object.entries(groupedExpenses).map(([month, monthExpenses]) => (
+            {groupedExpenses.map(([month, monthExpenses]) => (
               <div key={month} className="space-y-3">
                 <h3 className="text-xs font-black uppercase tracking-widest text-zinc-400 dark:text-zinc-500 pl-2">
                   {month}
@@ -343,7 +349,7 @@ export default function ExpenseList({
                                 {payer}
                               </span>
                             </div>
-                            <span className="text-[9px] text-zinc-300 dark:text-zinc-600 font-medium whitespace-nowrap ml-2">
+                            <span className="text-[9px] text-zinc-500 dark:text-zinc-400 font-medium whitespace-nowrap ml-2">
                               {format(new Date(expense.fecha), 'dd/MM/yy')}
                             </span>
                           </div>
