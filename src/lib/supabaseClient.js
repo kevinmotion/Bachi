@@ -21,28 +21,30 @@ const dummyClient = {
   from: () => ({
     select: () => ({
       eq: () => ({
-        single: () => Promise.resolve({ data: null, error: { message: 'Supabase no configurado' } }),
-        order: () => Promise.resolve({ data: [], error: { message: 'Supabase no configurado' } }),
+        single: () => Promise.resolve({ data: null, error: { message: 'Supabase no configurado', code: 'DUMMY' } }),
+        order: () => Promise.resolve({ data: [], error: { message: 'Supabase no configurado', code: 'DUMMY' } }),
       }),
-      order: () => Promise.resolve({ data: [], error: { message: 'Supabase no configurado' } }),
+      order: () => Promise.resolve({ data: [], error: { message: 'Supabase no configurado', code: 'DUMMY' } }),
     }),
     upsert: () => ({
       select: () => ({
-        single: () => Promise.resolve({ data: null, error: { message: 'Supabase no configurado' } }),
+        single: () => Promise.resolve({ data: null, error: { message: 'Supabase no configurado', code: 'DUMMY' } }),
       }),
     }),
     insert: () => ({
-      select: () => Promise.resolve({ data: [], error: { message: 'Supabase no configurado' } }),
+      select: () => ({
+        single: () => Promise.resolve({ data: null, error: { message: 'Supabase no configurado', code: 'DUMMY' } }),
+      }),
     }),
     update: () => ({
       eq: () => ({
         select: () => ({
-          single: () => Promise.resolve({ data: null, error: { message: 'Supabase no configurado' } }),
+          single: () => Promise.resolve({ data: null, error: { message: 'Supabase no configurado', code: 'DUMMY' } }),
         }),
       }),
     }),
     delete: () => ({
-      eq: () => Promise.resolve({ error: { message: 'Supabase no configurado' } }),
+      eq: () => Promise.resolve({ error: { message: 'Supabase no configurado', code: 'DUMMY' } }),
     }),
   }),
 };

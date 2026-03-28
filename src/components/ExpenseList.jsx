@@ -133,15 +133,15 @@ export default function ExpenseList({
             placeholder="Buscar concepto..."
             value={filters.searchTerm}
             onChange={(e) => onFilterChange({ searchTerm: e.target.value })}
-            className="w-full bg-zinc-50 dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 rounded-2xl pl-12 pr-4 py-3.5 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-zinc-900 dark:focus:ring-zinc-100 focus:bg-white dark:focus:bg-zinc-950 transition-all shadow-sm placeholder:text-zinc-400 dark:placeholder:text-zinc-600"
+            className="w-full bg-zinc-50 dark:bg-zinc-950 border border-zinc-100 dark:border-zinc-800 rounded-[32px] pl-12 pr-4 py-3.5 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-accent focus:bg-white dark:focus:bg-zinc-900 transition-all shadow-sm placeholder:text-zinc-400 dark:placeholder:text-zinc-600"
           />
         </div>
         <button 
           onClick={() => setShowFilters(!showFilters)}
-          className={`p-3.5 rounded-2xl border transition-all flex items-center justify-center relative ${
+          className={`p-3.5 rounded-[32px] border transition-all flex items-center justify-center relative ${
             showFilters || hasActiveFilters
-              ? 'bg-zinc-900 dark:bg-zinc-100 border-zinc-900 dark:border-zinc-100 text-white dark:text-zinc-900 shadow-lg shadow-zinc-200 dark:shadow-none' 
-              : 'bg-white dark:bg-zinc-950 border-zinc-100 dark:border-zinc-800 text-zinc-400 dark:text-zinc-500 hover:border-zinc-200 dark:hover:border-zinc-700'
+              ? 'bg-accent border-accent text-accent-foreground shadow-lg shadow-zinc-200 dark:shadow-none' 
+              : 'bg-white dark:bg-zinc-900 border-zinc-100 dark:border-zinc-800 text-zinc-400 dark:text-zinc-500 hover:border-zinc-200 dark:hover:border-zinc-700'
           }`}
         >
           <Filter size={20} />
@@ -160,7 +160,7 @@ export default function ExpenseList({
             exit={{ height: 0, opacity: 0, y: -10 }}
             className="overflow-hidden"
           >
-            <div className="bg-white dark:bg-zinc-950 p-6 rounded-[32px] border border-zinc-100 dark:border-zinc-800 shadow-xl shadow-zinc-100/50 dark:shadow-none space-y-6 mb-6">
+            <div className="bg-white dark:bg-zinc-900 p-6 rounded-[32px] border border-zinc-100 dark:border-zinc-800 shadow-xl shadow-zinc-100/50 dark:shadow-none space-y-6 mb-6">
               <div className="flex justify-between items-center">
                 <h4 className="text-xs font-black uppercase tracking-widest text-zinc-900 dark:text-zinc-100">Filtros Avanzados</h4>
                 {hasActiveFilters && (
@@ -181,7 +181,7 @@ export default function ExpenseList({
                   </label>
                   <button
                     onClick={() => setIsCalendarOpen(!isCalendarOpen)}
-                    className="w-full bg-zinc-50 dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-900 dark:focus:ring-zinc-100 transition-all flex justify-between items-center text-zinc-600 dark:text-zinc-300 text-left"
+                    className="w-full bg-zinc-50 dark:bg-zinc-950 border border-zinc-100 dark:border-zinc-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-accent transition-all flex justify-between items-center text-zinc-600 dark:text-zinc-300 text-left"
                   >
                     {selectedRange.from ? (
                       selectedRange.to ? (
@@ -201,7 +201,7 @@ export default function ExpenseList({
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 10 }}
-                        className="absolute top-full left-0 mt-2 bg-white dark:bg-zinc-950 border border-zinc-100 dark:border-zinc-800 shadow-xl rounded-2xl p-4 z-50"
+                        className="absolute top-full left-0 mt-2 bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 shadow-xl rounded-2xl p-4 z-50"
                       >
                         <DayPicker
                           mode="range"
@@ -210,10 +210,10 @@ export default function ExpenseList({
                           locale={es}
                           className="font-sans dark:text-zinc-100"
                           classNames={{
-                            day_selected: "bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 hover:bg-zinc-800 dark:hover:bg-zinc-200 hover:text-white dark:hover:text-zinc-900",
+                            day_selected: "bg-accent text-accent-foreground hover:opacity-90",
                             day_range_middle: "bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100",
-                            day_range_start: "bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900",
-                            day_range_end: "bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900",
+                            day_range_start: "bg-accent text-accent-foreground",
+                            day_range_end: "bg-accent text-accent-foreground",
                           }}
                         />
                       </motion.div>
@@ -233,10 +233,10 @@ export default function ExpenseList({
                         <button
                           key={user.id}
                           onClick={() => togglePayer(user.id)}
-                          className={`px-4 py-2 rounded-xl text-[10px] font-bold transition-all border active:scale-95 ${
+                          className={`px-4 py-2 rounded-[32px] text-[10px] font-bold transition-all border active:scale-95 ${
                             filters.payerId === user.id
-                              ? 'bg-zinc-900 dark:bg-zinc-100 border-zinc-900 dark:border-zinc-100 text-white dark:text-zinc-900' 
-                              : 'bg-zinc-50 dark:bg-zinc-900 border-zinc-100 dark:border-zinc-800 text-zinc-400 dark:text-zinc-500 hover:border-zinc-200 dark:hover:border-zinc-700'
+                              ? 'bg-accent border-accent text-accent-foreground' 
+                              : 'bg-zinc-50 dark:bg-zinc-950 border-zinc-100 dark:border-zinc-800 text-zinc-400 dark:text-zinc-500 hover:border-zinc-200 dark:hover:border-zinc-700'
                           }`}
                         >
                           {user.nombre}
@@ -255,10 +255,10 @@ export default function ExpenseList({
                         <button
                           key={cat}
                           onClick={() => toggleCategory(cat)}
-                          className={`px-4 py-2 rounded-xl text-[10px] font-bold transition-all border flex items-center gap-2 active:scale-95 ${
+                          className={`px-4 py-2 rounded-[32px] text-[10px] font-bold transition-all border flex items-center gap-2 active:scale-95 ${
                             filters.categories.includes(cat)
-                              ? 'bg-zinc-900 dark:bg-zinc-100 border-zinc-900 dark:border-zinc-100 text-white dark:text-zinc-900 shadow-md shadow-zinc-200 dark:shadow-none' 
-                              : 'bg-zinc-50 dark:bg-zinc-900 border-zinc-100 dark:border-zinc-800 text-zinc-400 dark:text-zinc-500 hover:border-zinc-200 dark:hover:border-zinc-700'
+                              ? 'bg-accent border-accent text-accent-foreground shadow-md shadow-zinc-200 dark:shadow-none' 
+                              : 'bg-zinc-50 dark:bg-zinc-950 border-zinc-100 dark:border-zinc-800 text-zinc-400 dark:text-zinc-500 hover:border-zinc-200 dark:hover:border-zinc-700'
                           }`}
                         >
                           {getCategoryIcon(cat)}
@@ -277,8 +277,8 @@ export default function ExpenseList({
       {/* List Section */}
       <div className="space-y-3">
         {expenses.length === 0 ? (
-          <div className="text-center py-20 bg-white dark:bg-zinc-950 rounded-[40px] border border-dashed border-zinc-200 dark:border-zinc-800">
-            <div className="bg-zinc-50 dark:bg-zinc-900 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+          <div className="text-center py-20 bg-white dark:bg-zinc-900 rounded-[32px] border border-dashed border-zinc-200 dark:border-zinc-800">
+            <div className="bg-zinc-50 dark:bg-zinc-950 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
               <Search size={24} className="text-zinc-300 dark:text-zinc-600" />
             </div>
             <p className="text-zinc-900 dark:text-zinc-100 font-bold">Sin resultados</p>
@@ -302,7 +302,7 @@ export default function ExpenseList({
                         layout
                         key={expense.id} 
                         onClick={() => setEditingExpense(expense)}
-                        className={`bg-white dark:bg-zinc-950 p-4 rounded-2xl border transition-all duration-200 cursor-pointer active:scale-[0.98] ${
+                        className={`bg-white dark:bg-zinc-900 p-4 rounded-[32px] border transition-all duration-200 cursor-pointer active:scale-[0.98] ${
                           isDeleting ? 'border-rose-200 dark:border-rose-900 ring-2 ring-rose-50 dark:ring-rose-950/30' : 'border-zinc-100 dark:border-zinc-800 hover:border-zinc-200 dark:hover:border-zinc-700'
                         } shadow-sm relative overflow-hidden`}
                       >
@@ -318,7 +318,7 @@ export default function ExpenseList({
                               <p className="text-rose-900 dark:text-rose-100 font-bold text-xs">¿Eliminar?</p>
                               <div className="flex gap-2">
                                 <button onClick={() => confirmDelete(expense.id)} className="bg-rose-600 dark:bg-rose-500 text-white px-4 py-1.5 rounded-lg text-[10px] font-bold">Sí</button>
-                                <button onClick={cancelDelete} className="bg-white dark:bg-zinc-900 text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-800 px-4 py-1.5 rounded-lg text-[10px] font-bold">No</button>
+                                <button onClick={cancelDelete} className="bg-white dark:bg-zinc-950 text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-800 px-4 py-1.5 rounded-lg text-[10px] font-bold">No</button>
                               </div>
                             </motion.div>
                           )}
@@ -334,14 +334,14 @@ export default function ExpenseList({
                               )}
                             </div>
                             <span className="font-sans font-black text-zinc-900 dark:text-zinc-100 text-sm whitespace-nowrap mt-0.5">
-                              S/ {montoPEN.toFixed(2)}
+                              S/ {montoPEN.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                             </span>
                           </div>
 
                           {/* Jerarquía 2: Chips y Fecha */}
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-1.5 overflow-hidden">
-                              <span className="px-2 py-0.5 bg-zinc-50 dark:bg-zinc-900 text-zinc-500 dark:text-zinc-400 rounded-md text-[9px] font-bold uppercase tracking-wider flex items-center gap-1 whitespace-nowrap">
+                              <span className="px-2 py-0.5 bg-zinc-50 dark:bg-zinc-950 text-zinc-500 dark:text-zinc-400 rounded-md text-[9px] font-bold uppercase tracking-wider flex items-center gap-1 whitespace-nowrap">
                                 {getCategoryIcon(expense.categoria)}
                                 {expense.categoria}
                               </span>
@@ -387,13 +387,13 @@ export default function ExpenseList({
               initial={{ scale: 0.9, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.9, opacity: 0, y: 20 }}
-              className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[95%] max-w-md bg-white dark:bg-zinc-950 rounded-[40px] p-8 z-[110] shadow-2xl overflow-hidden border border-zinc-100 dark:border-zinc-800"
+              className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[95%] max-w-md bg-white dark:bg-zinc-900 rounded-[32px] p-8 z-[110] shadow-2xl overflow-hidden border border-zinc-100 dark:border-zinc-800"
             >
               <div className="flex justify-between items-center mb-6">
                 <h3 className="font-serif italic text-2xl text-zinc-900 dark:text-zinc-100">Editar Gasto</h3>
                 <button 
                   onClick={() => setEditingExpense(null)}
-                  className="w-8 h-8 bg-zinc-50 dark:bg-zinc-900 rounded-full flex items-center justify-center text-zinc-400 dark:text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
+                  className="w-8 h-8 bg-zinc-50 dark:bg-zinc-950 rounded-full flex items-center justify-center text-zinc-400 dark:text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
                 >
                   <X size={18} />
                 </button>

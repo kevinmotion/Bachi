@@ -5,6 +5,10 @@ export function useTheme() {
     return localStorage.getItem('theme') || 'system';
   });
 
+  const [accent, setAccent] = useState(() => {
+    return localStorage.getItem('accent') || 'default';
+  });
+
   useEffect(() => {
     const root = window.document.documentElement;
     
@@ -35,5 +39,19 @@ export function useTheme() {
     return () => mediaQuery.removeEventListener('change', handleChange);
   }, [theme]);
 
-  return { theme, setTheme };
+  // Handle accent color
+  useEffect(() => {
+    const root = window.document.documentElement;
+    
+    // Remove all accent data attributes
+    root.removeAttribute('data-accent');
+    
+    if (accent !== 'default') {
+      root.setAttribute('data-accent', accent);
+    }
+    
+    localStorage.setItem('accent', accent);
+  }, [accent]);
+
+  return { theme, setTheme, accent, setAccent };
 }

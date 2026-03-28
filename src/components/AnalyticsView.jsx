@@ -144,8 +144,8 @@ export default function AnalyticsView({ expenses, spaceUsers = [], categories = 
 
   if (!stats) {
     return (
-      <div className="flex flex-col items-center justify-center py-24 px-6 text-center space-y-6 bg-white dark:bg-zinc-950 rounded-[48px] border border-dashed border-zinc-200 dark:border-zinc-800">
-        <div className="w-20 h-20 bg-zinc-50 dark:bg-zinc-900 rounded-full flex items-center justify-center text-zinc-200 dark:text-zinc-700">
+      <div className="flex flex-col items-center justify-center py-24 px-6 text-center space-y-6 bg-white dark:bg-zinc-900 rounded-[48px] border border-dashed border-zinc-200 dark:border-zinc-800">
+        <div className="w-20 h-20 bg-zinc-50 dark:bg-zinc-950 rounded-full flex items-center justify-center text-zinc-200 dark:text-zinc-700">
           <PieChartIcon size={40} strokeWidth={1.5} />
         </div>
         <div className="space-y-2">
@@ -194,65 +194,69 @@ export default function AnalyticsView({ expenses, spaceUsers = [], categories = 
       className="space-y-8 pb-32"
     >
       {/* Month Selector */}
-      <div className="flex items-center justify-between bg-white dark:bg-zinc-950 p-1.5 rounded-xl border border-zinc-100 dark:border-zinc-800 shadow-sm">
+      <div className="flex items-center justify-center gap-4 mb-[15px]">
         <button 
           onClick={handlePrevMonth}
-          className="p-2 hover:bg-zinc-50 dark:hover:bg-zinc-900 rounded-lg transition-colors text-zinc-400 dark:text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100"
+          className="p-2 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-full transition-colors text-zinc-400 dark:text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100"
         >
-          <ChevronLeft size={16} />
+          <ChevronLeft size={20} />
         </button>
-        <div className="flex items-center gap-1.5">
-          <Calendar size={12} className="text-zinc-400 dark:text-zinc-500" />
-          <span className="font-bold text-zinc-900 dark:text-zinc-100 capitalize text-xs">
+        
+        <div className="flex items-center gap-2 bg-white dark:bg-zinc-900 px-5 py-2 rounded-full border border-zinc-100 dark:border-zinc-800 shadow-sm">
+          <Calendar size={12} className="text-accent" />
+          <span className="font-bold text-zinc-900 dark:text-zinc-100 capitalize text-xs tracking-tight">
             {monthName}
           </span>
         </div>
+
         <button 
           onClick={handleNextMonth}
-          className="p-2 hover:bg-zinc-50 dark:hover:bg-zinc-900 rounded-lg transition-colors text-zinc-400 dark:text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100"
+          className="p-2 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-full transition-colors text-zinc-400 dark:text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100"
         >
-          <ChevronRight size={16} />
+          <ChevronRight size={20} />
         </button>
       </div>
 
       {/* KPI Section - Premium Look */}
-      <div className="grid grid-cols-[55fr_45fr] grid-rows-2 gap-3 md:gap-4">
-        <motion.div variants={itemVariants} className="col-span-1 row-span-2 bg-gradient-to-br from-zinc-50 to-white dark:from-zinc-900/40 dark:to-zinc-950 border border-zinc-200 dark:border-zinc-800 p-5 md:p-6 rounded-[32px] text-zinc-900 dark:text-zinc-100 relative overflow-hidden group shadow-sm flex flex-col items-center justify-center text-center gap-3 md:gap-4 h-full">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-[0.03] dark:opacity-[0.02] group-hover:scale-110 transition-transform pointer-events-none">
-            <Activity size={140} />
+      <div className="grid grid-cols-2 gap-3 md:gap-4">
+        <motion.div variants={itemVariants} className="col-span-2 bg-accent border border-accent p-5 md:p-6 rounded-[32px] text-accent-foreground relative overflow-hidden group shadow-sm flex flex-col items-center justify-center text-center gap-3 md:gap-4 h-[160px] mb-[5px]">
+          <div className="absolute -top-24 -right-24 w-64 h-64 bg-white opacity-[0.1] rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute top-4 right-4 opacity-[0.08] group-hover:scale-110 transition-transform pointer-events-none">
+            <Activity size={100} />
           </div>
           
-          <div className="relative z-10 flex items-center justify-center opacity-60">
+          <div className="relative z-10 flex items-center justify-center opacity-70">
             <p className="text-[8px] uppercase font-medium tracking-[0.15em]">Total Mes</p>
           </div>
           
           <div className="relative z-10 flex items-start justify-center gap-1">
-            <span className="text-sm md:text-base font-medium opacity-40 mt-1">S/</span>
-            <p className="text-3xl sm:text-4xl md:text-5xl font-sans font-black tracking-tighter break-words leading-none">
-              {stats.totalThisMonth.toLocaleString('es-PE', { minimumFractionDigits: 2 })}
+            <span className="text-sm md:text-base font-medium opacity-50 mt-1">S/</span>
+            <p className="text-[45px] font-sans font-black tracking-tighter break-words leading-[45px] text-accent-foreground">
+              {stats.totalThisMonth.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </p>
           </div>
 
-          <div className="relative z-10 flex items-center justify-center gap-1 opacity-80">
+          <div className="relative z-10 flex items-center justify-center gap-1 opacity-90">
             {stats.monthVariation > 0 ? (
-              <ArrowUpRight size={12} className="text-rose-500 dark:text-rose-400 shrink-0" />
+              <ArrowUpRight size={12} className="text-white shrink-0" />
             ) : (
-              <ArrowDownRight size={12} className="text-emerald-500 dark:text-emerald-400 shrink-0" />
+              <ArrowDownRight size={12} className="text-white shrink-0" />
             )}
-            <span className={`text-[10px] font-bold ${stats.monthVariation > 0 ? 'text-rose-500 dark:text-rose-400' : 'text-emerald-500 dark:text-emerald-400'}`}>
+            <span className="text-[10px] font-bold text-white">
               {Math.abs(stats.monthVariation).toFixed(1)}%
             </span>
           </div>
         </motion.div>
 
-        <motion.div variants={itemVariants} className="col-span-1 row-span-1 bg-white dark:bg-zinc-950 p-4 md:p-6 rounded-[24px] md:rounded-[32px] border border-zinc-100 dark:border-zinc-800 shadow-sm flex flex-col items-center justify-center text-center gap-0 h-full">
+        <motion.div variants={itemVariants} className="col-span-1 bg-white dark:bg-zinc-900 p-4 md:p-6 rounded-[24px] md:rounded-[32px] border border-zinc-100 dark:border-zinc-800 shadow-sm flex flex-col items-center justify-center text-center gap-0 h-[110px] relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-1 h-full bg-accent opacity-20" />
           <div className="flex items-center justify-center opacity-60 text-zinc-500 dark:text-zinc-400">
             <p className="text-[7px] md:text-[8px] uppercase font-medium tracking-[0.15em] leading-tight">Promedio Diario</p>
           </div>
           <div className="flex items-start justify-center gap-0.5">
             <span className="text-[10px] md:text-xs font-medium opacity-40 mt-[5px]">S/</span>
-            <p className="text-[25px] font-sans font-black text-zinc-900 dark:text-zinc-100 tracking-tighter break-words leading-[25px] mt-[5px] mb-[3px]">
-              {(stats.dailyAvg || 0).toFixed(2)}
+            <p className="text-[25px] font-sans font-black text-accent tracking-tighter break-words leading-[25px] mt-[5px] mb-[3px]">
+              {(stats.dailyAvg || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </p>
           </div>
           <div className="relative z-10 flex items-center justify-center gap-1 opacity-80 mt-[5px] mb-[5px]">
@@ -267,14 +271,15 @@ export default function AnalyticsView({ expenses, spaceUsers = [], categories = 
           </div>
         </motion.div>
 
-        <motion.div variants={itemVariants} className="col-span-1 row-span-1 bg-white dark:bg-zinc-950 p-4 md:p-6 rounded-[24px] md:rounded-[32px] border border-zinc-100 dark:border-zinc-800 shadow-sm flex flex-col items-center justify-center text-center gap-0 h-full">
+        <motion.div variants={itemVariants} className="col-span-1 bg-white dark:bg-zinc-900 p-4 md:p-6 rounded-[24px] md:rounded-[32px] border border-zinc-100 dark:border-zinc-800 shadow-sm flex flex-col items-center justify-center text-center gap-0 h-[110px] relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-1 h-full bg-accent opacity-20" />
           <div className="flex items-center justify-center opacity-60 text-zinc-500 dark:text-zinc-400">
             <p className="text-[7px] md:text-[8px] uppercase font-medium tracking-[0.15em] leading-tight">Mayor Gasto</p>
           </div>
           <div className="flex items-start justify-center gap-0.5">
             <span className="text-[10px] md:text-xs font-medium opacity-40 mt-[5px]">S/</span>
-            <p className="text-[25px] font-sans font-black text-zinc-900 dark:text-zinc-100 tracking-tighter break-words leading-[25px] mt-[5px] mb-[3px]">
-              {(stats.maxExpense || 0).toFixed(2)}
+            <p className="text-[25px] font-sans font-black text-accent tracking-tighter break-words leading-[25px] mt-[5px] mb-[3px]">
+              {(stats.maxExpense || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </p>
           </div>
           <div className="relative z-10 flex items-center justify-center gap-1 mt-[5px] mb-[5px]">
@@ -286,25 +291,25 @@ export default function AnalyticsView({ expenses, spaceUsers = [], categories = 
       </div>
 
       {/* Main Trend Chart */}
-      <motion.div variants={itemVariants} className="bg-white dark:bg-zinc-950 p-8 rounded-[40px] border border-zinc-100 dark:border-zinc-800 shadow-sm space-y-8">
+      <motion.div variants={itemVariants} className="bg-white dark:bg-zinc-900 p-8 rounded-[32px] border border-zinc-100 dark:border-zinc-800 shadow-sm space-y-8">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full bg-zinc-900 dark:bg-zinc-100" />
+              <div className="w-2 h-2 rounded-full bg-accent" />
               <h3 className="font-black text-zinc-900 dark:text-zinc-100 text-lg tracking-tight">Tendencia de Gastos</h3>
             </div>
             <p className="text-xs text-zinc-400 dark:text-zinc-500">Evolución durante el mes seleccionado</p>
           </div>
-          <div className="flex items-center gap-2 bg-zinc-50 dark:bg-zinc-900 p-1 rounded-xl">
+          <div className="flex items-center gap-2 bg-zinc-50 dark:bg-zinc-950 p-1 rounded-xl">
             <button 
               onClick={() => setTrendView('daily')}
-              className={`px-4 py-1.5 rounded-lg text-[10px] font-bold transition-all ${trendView === 'daily' ? 'bg-white dark:bg-zinc-800 shadow-sm text-zinc-900 dark:text-zinc-100' : 'text-zinc-400 dark:text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300'}`}
+              className={`px-4 py-1.5 rounded-lg text-[10px] font-bold transition-all ${trendView === 'daily' ? 'bg-accent shadow-sm text-accent-foreground' : 'text-zinc-400 dark:text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300'}`}
             >
               Diario
             </button>
             <button 
               onClick={() => setTrendView('weekly')}
-              className={`px-4 py-1.5 rounded-lg text-[10px] font-bold transition-all ${trendView === 'weekly' ? 'bg-white dark:bg-zinc-800 shadow-sm text-zinc-900 dark:text-zinc-100' : 'text-zinc-400 dark:text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300'}`}
+              className={`px-4 py-1.5 rounded-lg text-[10px] font-bold transition-all ${trendView === 'weekly' ? 'bg-accent shadow-sm text-accent-foreground' : 'text-zinc-400 dark:text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300'}`}
             >
               Semanal
             </button>
@@ -333,9 +338,9 @@ export default function AnalyticsView({ expenses, spaceUsers = [], categories = 
                 content={({ active, payload }) => {
                   if (active && payload && payload.length) {
                     return (
-                      <div className="bg-zinc-900 dark:bg-zinc-100 p-3 rounded-2xl shadow-xl border border-zinc-800 dark:border-zinc-200">
-                        <p className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest mb-1">{payload[0].payload.fullDate}</p>
-                        <p className="text-sm font-black text-white dark:text-zinc-900">S/ {payload[0].value.toFixed(2)}</p>
+                      <div className="bg-accent p-3 rounded-2xl shadow-xl border border-accent">
+                        <p className="text-[10px] font-bold text-accent-foreground opacity-70 uppercase tracking-widest mb-1">{payload[0].payload.fullDate}</p>
+                        <p className="text-sm font-black text-accent-foreground">S/ {payload[0].value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                       </div>
                     );
                   }
@@ -359,7 +364,7 @@ export default function AnalyticsView({ expenses, spaceUsers = [], categories = 
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {/* Category Distribution */}
-        <motion.div variants={itemVariants} className="bg-white dark:bg-zinc-950 p-8 rounded-[40px] border border-zinc-100 dark:border-zinc-800 shadow-sm space-y-8">
+        <motion.div variants={itemVariants} className="bg-white dark:bg-zinc-900 p-8 rounded-[32px] border border-zinc-100 dark:border-zinc-800 shadow-sm space-y-8">
           <div className="space-y-1">
             <h3 className="font-black text-zinc-900 dark:text-zinc-100 text-lg tracking-tight">Distribución</h3>
             <p className="text-xs text-zinc-400 dark:text-zinc-500">Por categorías de gasto</p>
@@ -386,13 +391,13 @@ export default function AnalyticsView({ expenses, spaceUsers = [], categories = 
                   <Tooltip 
                     contentStyle={{ borderRadius: '20px', border: 'none', boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1)', padding: '12px', backgroundColor: 'var(--tw-colors-zinc-900)', color: 'white' }}
                     itemStyle={{ fontSize: '12px', fontWeight: 'bold' }}
-                    formatter={(value) => `S/ ${value.toFixed(2)}`}
+                    formatter={(value) => `S/ ${value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
                   />
                 </PieChart>
               </ResponsiveContainer>
               <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
                 <p className="text-[10px] uppercase font-black tracking-widest text-zinc-300 dark:text-zinc-600">Total</p>
-                <p className="text-lg font-black text-zinc-900 dark:text-zinc-100">S/ {stats.totalThisMonth.toFixed(0)}</p>
+                <p className="text-lg font-black text-zinc-900 dark:text-zinc-100">S/ {stats.totalThisMonth.toLocaleString('en-US', { maximumFractionDigits: 0 })}</p>
               </div>
             </div>
 
@@ -403,7 +408,7 @@ export default function AnalyticsView({ expenses, spaceUsers = [], categories = 
                     <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: item.color }} />
                     <span className="text-xs font-bold text-zinc-500 dark:text-zinc-400 group-hover:text-zinc-900 dark:group-hover:text-zinc-100 transition-colors">{item.name}</span>
                   </div>
-                  <span className="text-xs font-mono font-bold text-zinc-900 dark:text-zinc-100">S/ {item.value.toFixed(2)}</span>
+                  <span className="text-xs font-mono font-bold text-zinc-900 dark:text-zinc-100">S/ {item.value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                 </div>
               ))}
             </div>
@@ -411,7 +416,7 @@ export default function AnalyticsView({ expenses, spaceUsers = [], categories = 
         </motion.div>
 
         {/* User Comparison */}
-        <motion.div variants={itemVariants} className="bg-white dark:bg-zinc-950 p-8 rounded-[40px] border border-zinc-100 dark:border-zinc-800 shadow-sm space-y-8">
+        <motion.div variants={itemVariants} className="bg-white dark:bg-zinc-900 p-8 rounded-[32px] border border-zinc-100 dark:border-zinc-800 shadow-sm space-y-8">
           <div className="space-y-1">
             <h3 className="font-black text-zinc-900 dark:text-zinc-100 text-lg tracking-tight">Comparativa</h3>
             <p className="text-xs text-zinc-400 dark:text-zinc-500">Gasto por persona en el mes</p>
@@ -430,7 +435,7 @@ export default function AnalyticsView({ expenses, spaceUsers = [], categories = 
                 <Tooltip 
                   cursor={{ fill: '#f8fafc', radius: 12 }}
                   contentStyle={{ borderRadius: '20px', border: 'none', boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1)', backgroundColor: 'var(--tw-colors-zinc-900)', color: 'white' }}
-                  formatter={(value) => `S/ ${value.toFixed(2)}`}
+                  formatter={(value) => `S/ ${value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
                 />
                 <Bar 
                   dataKey="value" 
@@ -448,7 +453,7 @@ export default function AnalyticsView({ expenses, spaceUsers = [], categories = 
             </ResponsiveContainer>
           </div>
 
-          <div className="bg-zinc-50 dark:bg-zinc-900 p-5 rounded-3xl space-y-4">
+          <div className="bg-zinc-50 dark:bg-zinc-950 p-5 rounded-3xl space-y-4">
             <p className="text-[10px] uppercase font-black tracking-widest text-zinc-400 dark:text-zinc-500">Resumen de Participación</p>
             <div className="space-y-3">
               {stats.barData.map((user, idx) => {
@@ -464,7 +469,7 @@ export default function AnalyticsView({ expenses, spaceUsers = [], categories = 
                         initial={{ width: 0 }}
                         animate={{ width: `${percentage}%` }}
                         transition={{ duration: 1, delay: 0.5 }}
-                        className={`h-full rounded-full ${idx === 0 ? 'bg-zinc-900 dark:bg-zinc-100' : 'bg-zinc-400 dark:bg-zinc-600'}`} 
+                        className={`h-full rounded-full ${idx === 0 ? 'bg-accent' : 'bg-zinc-400 dark:bg-zinc-600'}`} 
                       />
                     </div>
                   </div>

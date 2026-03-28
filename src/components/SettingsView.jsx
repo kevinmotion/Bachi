@@ -108,7 +108,8 @@ const ICON_OPTIONS = [
 ];
 
 const COLOR_OPTIONS = [
-  '#18181b', '#3f3f46', '#71717a', '#a1a1aa', '#d4d4d8',
+  '#18181b', '#f8c16f', '#e69695', '#c9acd3', '#0189bb', '#abc760',
+  '#3f3f46', '#71717a', '#a1a1aa', '#d4d4d8',
   '#ef4444', '#f97316', '#f59e0b', '#10b981', '#3b82f6',
   '#6366f1', '#8b5cf6', '#d946ef', '#f43f5e'
 ];
@@ -122,7 +123,9 @@ export default function SettingsView({
   onDeleteCategory, 
   categoriesLoading,
   theme,
-  setTheme
+  setTheme,
+  accent,
+  setAccent
 }) {
   const [authUserId, setAuthUserId] = useState(null);
   const [userName, setUserName] = useState(profile?.nombre || '');
@@ -161,6 +164,20 @@ export default function SettingsView({
     setOpenSection(openSection === section ? null : section);
   };
 
+  const handleAccentChange = async (newAccent) => {
+    setAccent(newAccent);
+    try {
+      const { error } = await supabase
+        .from('perfiles')
+        .update({ accent_color: newAccent })
+        .eq('id', profile.id);
+      
+      if (error) throw error;
+    } catch (err) {
+      console.error('Error updating accent color:', err);
+    }
+  };
+
   const SectionHeader = ({ id, icon: Icon, title, subtitle }) => {
     const isOpen = openSection === id;
     return (
@@ -171,7 +188,7 @@ export default function SettingsView({
         }`}
       >
         <div className="flex items-center gap-3 text-left">
-          <div className={`p-1.5 rounded-lg transition-colors ${isOpen ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900' : 'bg-zinc-50 text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500'}`}>
+          <div className={`p-1.5 rounded-lg transition-colors ${isOpen ? 'bg-accent text-accent-foreground' : 'bg-zinc-50 text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500'}`}>
             <Icon size={14} />
           </div>
           <div className="space-y-0.5">
@@ -418,7 +435,7 @@ export default function SettingsView({
 
   const showToast = (message) => {
     const toast = document.createElement('div');
-    toast.className = 'fixed bottom-24 left-1/2 -translate-x-1/2 bg-zinc-900 text-white px-6 py-3 rounded-full text-[10px] font-bold tracking-widest uppercase z-[100] animate-in fade-in slide-in-from-bottom-4 shadow-2xl';
+    toast.className = 'fixed bottom-24 left-1/2 -translate-x-1/2 bg-accent text-accent-foreground px-6 py-3 rounded-full text-[10px] font-bold tracking-widest uppercase z-[100] animate-in fade-in slide-in-from-bottom-4 shadow-2xl';
     toast.innerText = message;
     document.body.appendChild(toast);
     setTimeout(() => {
@@ -442,14 +459,15 @@ export default function SettingsView({
   }
 
   return (
-    <div className="divide-y divide-zinc-100 dark:divide-zinc-800/50 pb-32 animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <header className="px-1 py-4 space-y-1">
-        <h2 className="font-serif italic text-3xl text-zinc-900 dark:text-zinc-100">Configuración</h2>
-        <p className="text-xs text-zinc-400 dark:text-zinc-500">Personaliza tu experiencia y sincroniza datos.</p>
+    <>
+      <header className="px-8 pt-8 pb-6 space-y-1 text-header-fg">
+        <h2 className="font-serif italic text-4xl tracking-tight">Configuración</h2>
+        <p className="text-[10px] uppercase tracking-[0.2em] font-medium opacity-80">Personaliza tu experiencia</p>
       </header>
-
-      {/* Apariencia Section */}
-      <div className="py-1">
+      <div className="flex-1 bg-[#fbfbfb] dark:bg-zinc-950 rounded-t-[32px] p-6 md:p-8 pb-32">
+        <div className="divide-y divide-zinc-200 dark:divide-zinc-800/50">
+          {/* Apariencia Section */}
+          <div className="py-1">
         <SectionHeader 
           id="appearance" 
           icon={Moon} 
@@ -472,25 +490,52 @@ export default function SettingsView({
                   <div className="grid grid-cols-3 gap-2">
                     <button
                       onClick={() => setTheme('light')}
-                      className={`flex flex-col items-center justify-center p-2 rounded-lg border ${theme === 'light' ? 'border-zinc-900 bg-zinc-50 dark:border-zinc-100 dark:bg-zinc-800' : 'border-zinc-100 bg-white dark:border-zinc-800 dark:bg-zinc-900'} transition-all`}
+                      className={`flex flex-col items-center justify-center p-2 rounded-lg border ${theme === 'light' ? 'border-accent bg-zinc-50 dark:border-accent dark:bg-zinc-800' : 'border-zinc-100 bg-white dark:border-zinc-800 dark:bg-zinc-900'} transition-all`}
                     >
-                      <Sun size={16} className={theme === 'light' ? 'text-zinc-900 dark:text-zinc-100' : 'text-zinc-400'} />
-                      <span className={`text-[10px] mt-1 font-medium ${theme === 'light' ? 'text-zinc-900 dark:text-zinc-100' : 'text-zinc-500'}`}>Claro</span>
+                      <Sun size={16} className={theme === 'light' ? 'text-accent' : 'text-zinc-400'} />
+                      <span className={`text-[10px] mt-1 font-medium ${theme === 'light' ? 'text-accent' : 'text-zinc-500'}`}>Claro</span>
                     </button>
                     <button
                       onClick={() => setTheme('dark')}
-                      className={`flex flex-col items-center justify-center p-2 rounded-lg border ${theme === 'dark' ? 'border-zinc-900 bg-zinc-50 dark:border-zinc-100 dark:bg-zinc-800' : 'border-zinc-100 bg-white dark:border-zinc-800 dark:bg-zinc-900'} transition-all`}
+                      className={`flex flex-col items-center justify-center p-2 rounded-lg border ${theme === 'dark' ? 'border-accent bg-zinc-50 dark:border-accent dark:bg-zinc-800' : 'border-zinc-100 bg-white dark:border-zinc-800 dark:bg-zinc-900'} transition-all`}
                     >
-                      <Moon size={16} className={theme === 'dark' ? 'text-zinc-900 dark:text-zinc-100' : 'text-zinc-400'} />
-                      <span className={`text-[10px] mt-1 font-medium ${theme === 'dark' ? 'text-zinc-900 dark:text-zinc-100' : 'text-zinc-500'}`}>Oscuro</span>
+                      <Moon size={16} className={theme === 'dark' ? 'text-accent' : 'text-zinc-400'} />
+                      <span className={`text-[10px] mt-1 font-medium ${theme === 'dark' ? 'text-accent' : 'text-zinc-500'}`}>Oscuro</span>
                     </button>
                     <button
                       onClick={() => setTheme('system')}
-                      className={`flex flex-col items-center justify-center p-2 rounded-lg border ${theme === 'system' ? 'border-zinc-900 bg-zinc-50 dark:border-zinc-100 dark:bg-zinc-800' : 'border-zinc-100 bg-white dark:border-zinc-800 dark:bg-zinc-900'} transition-all`}
+                      className={`flex flex-col items-center justify-center p-2 rounded-lg border ${theme === 'system' ? 'border-accent bg-zinc-50 dark:border-accent dark:bg-zinc-800' : 'border-zinc-100 bg-white dark:border-zinc-800 dark:bg-zinc-900'} transition-all`}
                     >
-                      <Monitor size={16} className={theme === 'system' ? 'text-zinc-900 dark:text-zinc-100' : 'text-zinc-400'} />
-                      <span className={`text-[10px] mt-1 font-medium ${theme === 'system' ? 'text-zinc-900 dark:text-zinc-100' : 'text-zinc-500'}`}>Sistema</span>
+                      <Monitor size={16} className={theme === 'system' ? 'text-accent' : 'text-zinc-400'} />
+                      <span className={`text-[10px] mt-1 font-medium ${theme === 'system' ? 'text-accent' : 'text-zinc-500'}`}>Sistema</span>
                     </button>
+                  </div>
+                </div>
+
+                <div className="space-y-2 pt-2">
+                  <label className="text-[9px] uppercase font-bold tracking-widest opacity-40 dark:text-zinc-500">
+                    Color de Acento
+                  </label>
+                  <div className="flex gap-3 flex-wrap">
+                    {[
+                      { id: 'default', color: '#18181b', darkColor: '#f4f4f5' },
+                      { id: 'orange', color: '#f8c16f', darkColor: '#fbd49a' },
+                      { id: 'pink', color: '#e69695', darkColor: '#f0b8b7' },
+                      { id: 'lavender', color: '#c9acd3', darkColor: '#dec8e5' },
+                      { id: 'blue', color: '#0189bb', darkColor: '#33a1c9' },
+                      { id: 'green', color: '#abc760', darkColor: '#c2d58a' }
+                    ].map((c) => (
+                      <button
+                        key={c.id}
+                        onClick={() => handleAccentChange(c.id)}
+                        className={`w-8 h-8 rounded-full flex items-center justify-center transition-all ${
+                          accent === c.id ? 'ring-2 ring-offset-2 ring-zinc-900 dark:ring-zinc-100 dark:ring-offset-zinc-950 scale-110' : 'hover:scale-105'
+                        }`}
+                        style={{ backgroundColor: theme === 'dark' ? c.darkColor : c.color }}
+                      >
+                        {accent === c.id && <CheckCircle2 size={14} className={c.id === 'default' && theme === 'dark' ? 'text-zinc-900' : 'text-white'} />}
+                      </button>
+                    ))}
                   </div>
                 </div>
               </div>
@@ -548,7 +593,7 @@ export default function SettingsView({
                       <button 
                         type="button"
                         onClick={handleShare}
-                        className="flex items-center justify-center gap-1.5 py-2 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded-lg font-bold text-[9px] uppercase tracking-widest active:scale-95 shadow-lg shadow-zinc-100 dark:shadow-none"
+                        className="flex items-center justify-center gap-1.5 py-2 bg-accent text-accent-foreground rounded-lg font-bold text-[9px] uppercase tracking-widest active:scale-95 shadow-lg shadow-zinc-100 dark:shadow-none"
                       >
                         <Share2 size={12} /> Compartir
                       </button>
@@ -599,7 +644,7 @@ export default function SettingsView({
                     className={`w-full py-2.5 rounded-lg font-bold text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 transition-all ${
                       isSaved 
                         ? 'bg-green-500 text-white' 
-                        : 'bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 shadow-md shadow-zinc-100 dark:shadow-none'
+                        : 'bg-accent text-accent-foreground shadow-md shadow-zinc-100 dark:shadow-none'
                     } active:scale-95 disabled:opacity-50`}
                   >
                     {loading ? (
@@ -647,7 +692,7 @@ export default function SettingsView({
                       'La app se actualizará sola.'
                     ].map((step, i) => (
                       <div key={i} className="flex gap-2 items-center">
-                        <span className="w-3.5 h-3.5 bg-zinc-900 dark:bg-zinc-100 rounded-full flex items-center justify-center text-[7px] font-bold text-white dark:text-zinc-900 shrink-0">
+                        <span className="w-3.5 h-3.5 bg-accent rounded-full flex items-center justify-center text-[7px] font-bold text-accent-foreground shrink-0">
                           {i + 1}
                         </span>
                         <p className="text-[9px] text-zinc-500 dark:text-zinc-400">{step}</p>
@@ -673,7 +718,7 @@ export default function SettingsView({
                         type="button"
                         onClick={handleSync}
                         disabled={linking || !partnerUserId}
-                        className="px-3 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded-lg font-bold text-[9px] uppercase tracking-widest active:scale-95 disabled:opacity-50"
+                        className="px-3 bg-accent text-accent-foreground rounded-lg font-bold text-[9px] uppercase tracking-widest active:scale-95 disabled:opacity-50"
                       >
                         {linking ? <Loader2 className="animate-spin" size={12} /> : 'Vincular'}
                       </button>
@@ -779,7 +824,7 @@ export default function SettingsView({
               animate={{ y: 0 }}
               exit={{ y: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="relative w-full max-w-md bg-white dark:bg-zinc-900 rounded-t-[40px] sm:rounded-[40px] shadow-2xl overflow-y-auto max-h-[90vh] custom-scrollbar"
+              className="relative w-full max-w-md bg-white dark:bg-zinc-900 rounded-t-[32px] sm:rounded-[32px] shadow-2xl overflow-y-auto max-h-[90vh] custom-scrollbar"
             >
               <div className="p-8 space-y-8">
                 <div className="flex items-center justify-between">
@@ -851,7 +896,7 @@ export default function SettingsView({
                             type="button"
                             onClick={() => editingCategory ? setEditIcon(opt.name) : setSelectedIcon(opt.name)}
                             className={`w-full aspect-square rounded-2xl border flex items-center justify-center transition-all active:scale-90 ${
-                              isSelected ? 'bg-zinc-900 dark:bg-zinc-100 border-zinc-900 dark:border-zinc-100 text-white dark:text-zinc-900 shadow-lg shadow-zinc-200 dark:shadow-none' : 'bg-zinc-50 dark:bg-zinc-800 border-zinc-100 dark:border-zinc-700 text-zinc-400 hover:border-zinc-200 dark:hover:border-zinc-600'
+                              isSelected ? 'bg-accent border-accent text-accent-foreground shadow-lg shadow-zinc-200 dark:shadow-none' : 'bg-zinc-50 dark:bg-zinc-800 border-zinc-100 dark:border-zinc-700 text-zinc-400 hover:border-zinc-200 dark:hover:border-zinc-600'
                             }`}
                           >
                             <Icon size={20} />
@@ -865,7 +910,7 @@ export default function SettingsView({
                     <button
                       type="submit"
                       disabled={editingCategory ? !editName.trim() : !newCategory.trim()}
-                      className="w-full py-5 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded-[28px] font-bold text-sm flex items-center justify-center gap-2 hover:bg-black dark:hover:bg-white transition-all active:scale-95 disabled:opacity-50 shadow-xl shadow-zinc-200 dark:shadow-none"
+                      className="w-full py-5 bg-accent text-accent-foreground rounded-[28px] font-bold text-sm flex items-center justify-center gap-2 hover:opacity-90 transition-all active:scale-95 disabled:opacity-50 shadow-xl shadow-zinc-200 dark:shadow-none"
                     >
                       {editingCategory ? (
                         <>
@@ -931,7 +976,7 @@ export default function SettingsView({
                       required
                     />
                   </div>
-                  <button type="submit" disabled={passwordLoading} className="w-full py-2.5 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded-lg font-bold text-[10px] uppercase tracking-widest active:scale-95 disabled:opacity-50">
+                  <button type="submit" disabled={passwordLoading} className="w-full py-2.5 bg-accent text-accent-foreground rounded-lg font-bold text-[10px] uppercase tracking-widest active:scale-95 disabled:opacity-50">
                     {passwordLoading ? <Loader2 className="animate-spin mx-auto" size={14} /> : 'Actualizar Contraseña'}
                   </button>
                 </form>
@@ -946,10 +991,10 @@ export default function SettingsView({
         <div className="py-2">
           <button
             onClick={handleInstallClick}
-            className="w-full bg-zinc-900 dark:bg-zinc-100 p-3 rounded-xl text-white dark:text-zinc-900 flex items-center justify-between shadow-md shadow-zinc-200 dark:shadow-none active:scale-[0.98] transition-all"
+            className="w-full bg-accent p-3 rounded-xl text-accent-foreground flex items-center justify-between shadow-md shadow-zinc-200 dark:shadow-none active:scale-[0.98] transition-all"
           >
             <div className="flex items-center gap-3 text-left">
-              <div className="bg-white/10 dark:bg-zinc-900/10 p-1.5 rounded-lg">
+              <div className="bg-white/20 dark:bg-black/20 p-1.5 rounded-lg">
                 <Smartphone size={14} />
               </div>
               <div className="space-y-0.5">
@@ -961,6 +1006,8 @@ export default function SettingsView({
           </button>
         </div>
       )}
-    </div>
+        </div>
+      </div>
+    </>
   );
 }

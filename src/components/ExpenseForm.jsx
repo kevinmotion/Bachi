@@ -166,8 +166,8 @@ export default function ExpenseForm({
               onClick={() => setIsNotaModalOpen(true)}
               className={`p-2 rounded-xl transition-colors border flex-shrink-0 ${
                 nota 
-                  ? 'bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 border-zinc-900 dark:border-zinc-100 shadow-md shadow-zinc-200 dark:shadow-none' 
-                  : 'bg-zinc-50 dark:bg-zinc-900 text-zinc-400 dark:text-zinc-500 border-zinc-100 dark:border-zinc-800 hover:border-zinc-200 dark:hover:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800'
+                  ? 'bg-accent text-accent-foreground border-accent shadow-md shadow-zinc-200 dark:shadow-none' 
+                  : 'bg-zinc-50 dark:bg-zinc-950 text-zinc-400 dark:text-zinc-500 border-zinc-100 dark:border-zinc-800 hover:border-zinc-200 dark:hover:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800'
               }`}
               title="Añadir anotación"
             >
@@ -188,7 +188,7 @@ export default function ExpenseForm({
                 value={formData.monto}
                 onChange={(e) => setFormData({ ...formData, monto: e.target.value })}
                 placeholder="0.00"
-                className="w-full bg-zinc-50 dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 rounded-xl pl-3 pr-10 py-3 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-zinc-900 dark:focus:ring-zinc-100 transition-all font-mono font-bold"
+                className="w-full bg-zinc-50 dark:bg-zinc-950 border border-zinc-100 dark:border-zinc-800 rounded-[32px] pl-3 pr-10 py-3 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-accent transition-all font-mono font-bold"
                 required
               />
               <button
@@ -208,7 +208,7 @@ export default function ExpenseForm({
                   value={formData.tipo_cambio}
                   onChange={(e) => setFormData({ ...formData, tipo_cambio: e.target.value })}
                   placeholder="TC"
-                  className="w-full bg-zinc-50 dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 rounded-xl px-1 py-3 text-[10px] text-zinc-900 dark:text-zinc-100 font-mono font-bold focus:outline-none focus:ring-1 focus:ring-zinc-900 dark:focus:ring-zinc-100 transition-all text-center"
+                  className="w-full bg-zinc-50 dark:bg-zinc-950 border border-zinc-100 dark:border-zinc-800 rounded-[32px] px-1 py-3 text-[10px] text-zinc-900 dark:text-zinc-100 font-mono font-bold focus:outline-none focus:ring-1 focus:ring-accent transition-all text-center"
                 />
               </div>
             )}
@@ -221,7 +221,7 @@ export default function ExpenseForm({
           <button
             type="button"
             onClick={() => setIsCategoryModalOpen(true)}
-            className="w-full h-11 px-4 rounded-xl border bg-zinc-50 dark:bg-zinc-900 border-zinc-100 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 transition-all flex items-center gap-2 active:scale-95"
+            className="w-full h-11 px-4 rounded-[32px] border bg-zinc-50 dark:bg-zinc-950 border-zinc-100 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 transition-all flex items-center gap-2 active:scale-95"
           >
             <div className="p-1.5 bg-white dark:bg-zinc-800 rounded-lg shadow-sm">
               <CategoryIcon size={14} className="text-zinc-900 dark:text-zinc-100" />
@@ -239,7 +239,7 @@ export default function ExpenseForm({
             <button
               type="button"
               onClick={togglePayer}
-              className="w-full h-10 rounded-xl text-xs font-bold transition-all border bg-zinc-900 dark:bg-zinc-100 border-zinc-900 dark:border-zinc-100 text-white dark:text-zinc-900 shadow-md shadow-zinc-100 dark:shadow-none flex items-center justify-center gap-2 active:scale-95"
+              className="w-full h-10 rounded-[32px] text-xs font-bold transition-all border bg-accent border-accent text-accent-foreground shadow-md shadow-zinc-100 dark:shadow-none flex items-center justify-center gap-2 active:scale-95"
             >
               <User size={15} />
               {spaceUsers.find(u => u.id === formData.pagador_id)?.nombre || 'Yo'}
@@ -252,7 +252,7 @@ export default function ExpenseForm({
               <button
                 type="button"
                 onClick={cycleDebt}
-                className="flex-1 rounded-xl border bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-zinc-100 text-xs font-bold transition-all active:scale-90 flex items-center justify-center shadow-sm"
+                className="flex-1 rounded-[32px] border bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-zinc-100 text-xs font-bold transition-all active:scale-90 flex items-center justify-center shadow-sm"
               >
                 {Math.round(parseFloat(formData.factor_deuda) * 100)}%
               </button>
@@ -262,7 +262,7 @@ export default function ExpenseForm({
                 max="10"
                 value={debtInput}
                 onChange={(e) => handleDebtInputChange(e.target.value)}
-                className="w-10 rounded-xl border bg-zinc-50 dark:bg-zinc-900 border-zinc-100 dark:border-zinc-800 text-center text-xs text-zinc-900 dark:text-zinc-100 font-mono font-bold focus:outline-none focus:ring-1 focus:ring-zinc-900 dark:focus:ring-zinc-100 transition-all"
+                className="w-10 rounded-[32px] border bg-zinc-50 dark:bg-zinc-950 border-zinc-100 dark:border-zinc-800 text-center text-xs text-zinc-900 dark:text-zinc-100 font-mono font-bold focus:outline-none focus:ring-1 focus:ring-accent transition-all"
                 placeholder="1-10"
               />
             </div>
@@ -278,7 +278,7 @@ export default function ExpenseForm({
               type="datetime-local"
               value={formData.fecha}
               onChange={(e) => setFormData({ ...formData, fecha: e.target.value })}
-              className="w-full bg-zinc-50 dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 rounded-xl pl-10 pr-3 py-3 text-xs text-zinc-900 dark:text-zinc-100 font-medium focus:outline-none focus:ring-1 focus:ring-zinc-900 dark:focus:ring-zinc-100 transition-all"
+              className="w-full bg-zinc-50 dark:bg-zinc-950 border border-zinc-100 dark:border-zinc-800 rounded-[32px] pl-10 pr-3 py-3 text-xs text-zinc-900 dark:text-zinc-100 font-medium focus:outline-none focus:ring-1 focus:ring-accent transition-all"
             />
           </div>
         </div>
@@ -288,7 +288,7 @@ export default function ExpenseForm({
           <motion.button
             type="submit"
             whileTap={{ scale: 0.98 }}
-            className="w-full bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 py-3.5 rounded-xl font-bold text-xs flex items-center justify-center gap-2 hover:bg-black dark:hover:bg-white transition-all shadow-lg shadow-zinc-200 dark:shadow-none active:scale-95"
+            className="w-full bg-accent text-accent-foreground py-3.5 rounded-[32px] font-bold text-xs flex items-center justify-center gap-2 hover:opacity-90 transition-all shadow-lg shadow-zinc-200 dark:shadow-none active:scale-95"
           >
             <Check size={16} /> {isEditing ? 'Actualizar Gasto' : 'Registrar Gasto'}
           </motion.button>
@@ -310,10 +310,10 @@ export default function ExpenseForm({
               initial={{ scale: 0.9, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.9, opacity: 0, y: 20 }}
-              className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-sm bg-white dark:bg-zinc-950 rounded-[40px] p-6 z-[110] shadow-2xl border border-zinc-100 dark:border-zinc-800"
+              className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-sm bg-white dark:bg-zinc-900 rounded-[32px] p-6 z-[110] shadow-2xl border border-zinc-100 dark:border-zinc-800"
             >
               <div className="text-center mb-6">
-                <h3 className="font-serif italic text-xl text-zinc-900 dark:text-zinc-100">Categoría</h3>
+                <h3 className="font-serif italic text-2xl text-zinc-900 dark:text-zinc-100">Categoría</h3>
               </div>
               <div className="flex flex-wrap justify-center gap-2">
                 {displayCategories.map((cat) => {
@@ -326,8 +326,8 @@ export default function ExpenseForm({
                       onClick={() => selectCategory(cat.nombre)}
                       className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all border active:scale-95 ${
                         isActive 
-                          ? 'bg-zinc-900 dark:bg-zinc-100 border-zinc-900 dark:border-zinc-100 text-white dark:text-zinc-900 shadow-lg dark:shadow-none' 
-                          : 'bg-zinc-50 dark:bg-zinc-900 border-zinc-100 dark:border-zinc-800 text-zinc-500 dark:text-zinc-400'
+                          ? 'bg-accent border-accent text-accent-foreground shadow-lg dark:shadow-none' 
+                          : 'bg-zinc-50 dark:bg-zinc-950 border-zinc-100 dark:border-zinc-800 text-zinc-500 dark:text-zinc-400'
                       }`}
                     >
                       <Icon size={14} />
@@ -360,29 +360,29 @@ export default function ExpenseForm({
               initial={{ scale: 0.9, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.9, opacity: 0, y: 20 }}
-              className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-sm bg-white dark:bg-zinc-950 rounded-2xl p-6 z-[110] shadow-2xl flex flex-col gap-4 border border-zinc-100 dark:border-zinc-800"
+              className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-sm bg-white dark:bg-zinc-900 rounded-[32px] p-6 z-[110] shadow-2xl flex flex-col gap-4 border border-zinc-100 dark:border-zinc-800"
             >
               <div className="text-center">
-                <h3 className="font-serif italic text-xl text-zinc-900 dark:text-zinc-100">Añadir anotación</h3>
+                <h3 className="font-serif italic text-2xl text-zinc-900 dark:text-zinc-100">Añadir anotación</h3>
               </div>
               <textarea
                 value={nota}
                 onChange={(e) => setNota(e.target.value)}
                 placeholder="Escribe una nota o detalle adicional..."
-                className="w-full bg-zinc-50 dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 rounded-xl p-4 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-zinc-900 dark:focus:ring-zinc-100 transition-all resize-none h-32 placeholder:text-zinc-400 dark:placeholder:text-zinc-600"
+                className="w-full bg-zinc-50 dark:bg-zinc-950 border border-zinc-100 dark:border-zinc-800 rounded-[32px] p-4 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-accent transition-all resize-none h-32 placeholder:text-zinc-400 dark:placeholder:text-zinc-600"
               />
               <div className="flex gap-3 mt-2">
                 <button
                   type="button"
                   onClick={() => setIsNotaModalOpen(false)}
-                  className="flex-1 py-3 rounded-xl text-xs font-bold text-zinc-500 dark:text-zinc-400 bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors uppercase tracking-widest"
+                  className="flex-1 py-3 rounded-[32px] text-xs font-bold text-zinc-500 dark:text-zinc-400 bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors uppercase tracking-widest"
                 >
                   Cancelar
                 </button>
                 <button
                   type="button"
                   onClick={() => setIsNotaModalOpen(false)}
-                  className="flex-1 py-3 rounded-xl text-xs font-bold text-white dark:text-zinc-900 bg-zinc-900 dark:bg-zinc-100 hover:bg-zinc-800 dark:hover:bg-white transition-colors uppercase tracking-widest shadow-lg shadow-zinc-200 dark:shadow-none"
+                  className="flex-1 py-3 rounded-[32px] text-xs font-bold text-accent-foreground bg-accent hover:opacity-90 transition-colors uppercase tracking-widest shadow-lg shadow-zinc-200 dark:shadow-none"
                 >
                   Guardar Nota
                 </button>

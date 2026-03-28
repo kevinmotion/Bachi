@@ -4,6 +4,7 @@ import { useCategories } from './hooks/useCategories';
 import ExpenseForm from './components/ExpenseForm';
 import BalanceCard from './components/BalanceCard';
 import ExpenseList from './components/ExpenseList';
+import FoodBalanceCard from './components/FoodBalanceCard';
 import Layout from './components/Layout';
 import SettingsView from './components/SettingsView';
 import AnalyticsView from './components/AnalyticsView';
@@ -21,7 +22,7 @@ export default function App() {
   const [currentView, setCurrentView] = useState('home');
   const [loading, setLoading] = useState(true);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const { theme, setTheme } = useTheme();
+  const { theme, setTheme, accent, setAccent } = useTheme();
 
   useEffect(() => {
     const initSession = async () => {
@@ -62,39 +63,39 @@ export default function App() {
 
   const fetchProfile = async (userId: string, email: string) => {
     try {
-      // Use upsert to ensure profile exists
-      const { data, error } = await supabase
+      // First, try to fetch the existing profile
+      let { data, error } = await supabase
         .from('perfiles')
-        .upsert({ 
-          id: userId, 
-          email: email,
-          // Only set defaults if it's a new record (Supabase upsert handles this if we don't provide them and they have defaults, 
-          // but here we want to ensure nombre and partner_name have something if it's the first time)
-        }, { onConflict: 'id' })
         .select()
+        .eq('id', userId)
         .single();
       
-      if (error) throw error;
-
-      // If nombre is null (newly created profile via upsert without defaults in DB), 
-      // we might want to update it with defaults if it's the first time.
-      // But better yet, let's just fetch and if it's empty, update.
-      
-      if (!data.nombre) {
-        const { data: updatedData, error: updateError } = await supabase
+      if (error && error.code === 'PGRST116') {
+        // Profile doesn't exist, create it
+        const { data: newData, error: insertError } = await supabase
           .from('perfiles')
-          .update({ 
+          .insert({ 
+            id: userId, 
+            email: email,
             nombre: 'Usuario', 
-            espacio_shared_id: userId 
+            espacio_shared_id: userId,
+            accent_color: accent // Use current local accent as default for new profile
           })
-          .eq('id', userId)
           .select()
           .single();
         
-        if (updateError) throw updateError;
-        setProfile(updatedData);
-      } else {
+        if (insertError) throw insertError;
+        data = newData;
+      } else if (error) {
+        throw error;
+      }
+
+      // If we have data, set profile and accent
+      if (data) {
         setProfile(data);
+        if (data.accent_color) {
+          setAccent(data.accent_color);
+        }
       }
     } catch (err) {
       console.error('Error fetching/creating profile:', err);
@@ -104,6 +105,7 @@ export default function App() {
   };
 
   const { 
+    expenses,
     filteredExpenses, 
     filters, 
     updateFilters, 
@@ -131,6 +133,7 @@ export default function App() {
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
+    setAccent('default');
   };
 
   const handleProfileUpdate = (updatedProfile) => {
@@ -139,7 +142,7 @@ export default function App() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-white dark:bg-zinc-950 flex items-center justify-center">
+      <div className="min-h-screen bg-[#fbfbfb] dark:bg-zinc-950 flex items-center justify-center">
         <Loader2 className="animate-spin text-zinc-900 dark:text-zinc-100" size={32} />
       </div>
     );
@@ -152,7 +155,7 @@ export default function App() {
   // Null guard for profile
   if (!profile) {
     return (
-      <div className="min-h-screen bg-white dark:bg-zinc-950 flex flex-col items-center justify-center p-6 text-center space-y-4">
+      <div className="min-h-screen bg-[#fbfbfb] dark:bg-zinc-950 flex flex-col items-center justify-center p-6 text-center space-y-4">
         <Loader2 className="animate-spin text-zinc-900 dark:text-zinc-100" size={32} />
         <p className="text-zinc-500 dark:text-zinc-400 font-medium animate-pulse">Cargando perfil y sincronizando datos...</p>
       </div>
@@ -164,63 +167,68 @@ export default function App() {
       case 'home':
         const currentDate = new Intl.DateTimeFormat('es-ES', { weekday: 'long', day: 'numeric', month: 'long' }).format(new Date());
         return (
-          <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500 overflow-hidden">
-            <header className="flex justify-between items-center">
+          <>
+            <header className="px-8 pt-8 pb-6 flex justify-between items-start text-header-fg">
               <div className="space-y-1">
-                <p className="text-[9px] uppercase tracking-[0.4em] font-bold text-zinc-400 dark:text-zinc-500 capitalize">{currentDate}</p>
-                <h1 className="font-serif italic text-3xl text-zinc-900 dark:text-zinc-100 tracking-tight">Hola, {profile?.nombre || 'Usuario'}</h1>
+                <h1 className="font-serif italic text-4xl tracking-tight">Hola, {profile?.nombre || 'Usuario'}</h1>
+                <p className="text-[10px] uppercase tracking-[0.2em] font-medium opacity-80 capitalize">{currentDate}</p>
               </div>
               <button 
                 onClick={handleLogout}
-                className="w-10 h-10 bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 rounded-full flex items-center justify-center text-zinc-400 dark:text-zinc-500 shadow-sm hover:text-rose-500 dark:hover:text-rose-400 transition-colors active:scale-90"
+                className="w-10 h-10 bg-white/10 dark:bg-black/10 border border-white/20 dark:border-black/20 rounded-full flex items-center justify-center text-accent-foreground shadow-sm hover:opacity-80 transition-all active:scale-90"
               >
-                <LogOut size={16} />
+                <LogOut size={16} className="text-header-fg" />
               </button>
             </header>
+            <div className="flex-1 bg-[#fbfbfb] dark:bg-zinc-950 rounded-t-[32px] p-6 md:p-8 space-y-8 pb-32">
+              <BalanceCard 
+                netBalance={isLoading ? null : balances.netBalance} 
+                spaceUsers={spaceUsers}
+                isLoading={isLoading}
+              />
 
-            <BalanceCard 
-              netBalance={isLoading ? null : balances.netBalance} 
-              spaceUsers={spaceUsers}
-              isLoading={isLoading}
-            />
-
-            <section className="grid grid-cols-2 gap-3">
-              <div className="bg-white dark:bg-zinc-950 p-4 md:p-6 rounded-[24px] md:rounded-[32px] border border-zinc-100 dark:border-zinc-800 shadow-sm flex flex-col items-center justify-center text-center gap-0 h-[90px]">
+            <section className="grid grid-cols-2 gap-3 mb-[15px]">
+              <div className="bg-white dark:bg-zinc-900 p-4 md:p-6 rounded-[32px] border border-zinc-100 dark:border-zinc-800 shadow-sm flex flex-col items-center justify-center text-center gap-0 h-[90px] relative overflow-hidden">
+                <div className="absolute top-0 left-0 w-1 h-full bg-accent opacity-20" />
                 <div className="flex items-center justify-center opacity-60 text-zinc-500 dark:text-zinc-400">
                   <p className="text-[7px] md:text-[8px] uppercase font-medium tracking-[0.15em] leading-tight">Gasto Total Mes</p>
                 </div>
                 <div className="flex items-start justify-center gap-0.5">
                   <span className="text-[10px] md:text-xs font-medium opacity-40 mt-[5px]">S/</span>
-                  <p className="text-[25px] font-sans font-black text-zinc-900 dark:text-zinc-100 tracking-tighter break-words leading-[25px] mt-[5px] mb-[3px]">
-                    {balances.totalGeneralPEN.toFixed(2)}
+                  <p className="text-[25px] font-sans font-black text-accent tracking-tighter break-words leading-[25px] mt-[5px] mb-[3px]">
+                    {balances.totalGeneralPEN.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </p>
                 </div>
               </div>
-              <div className="bg-white dark:bg-zinc-950 p-4 md:p-6 rounded-[24px] md:rounded-[32px] border border-[#f4f4f5] dark:border-zinc-800 shadow-sm flex flex-col items-center justify-center text-center gap-0 h-[90px]">
+              <div className="bg-white dark:bg-zinc-900 p-4 md:p-6 rounded-[32px] border border-[#f4f4f5] dark:border-zinc-800 shadow-sm flex flex-col items-center justify-center text-center gap-0 h-[90px] relative overflow-hidden">
+                <div className="absolute top-0 left-0 w-1 h-full bg-accent opacity-20" />
                 <div className="flex items-center justify-center text-[#71717b] dark:text-zinc-400">
                   <p className="text-[7px] md:text-[8px] uppercase font-medium tracking-[0.15em] leading-tight">Mi Gasto</p>
                 </div>
                 <div className="flex items-start justify-center gap-0.5">
                   <span className="text-[10px] md:text-xs font-medium text-[#18181b] dark:text-zinc-400 opacity-40 mt-[5px]">S/</span>
-                  <p className="text-[25px] font-sans font-black text-[#18181b] dark:text-zinc-100 tracking-tighter break-words leading-[25px] mt-[5px] mb-[3px]">
-                    {(balances.totals[profile?.id] || 0).toFixed(2)}
+                  <p className="text-[25px] font-sans font-black text-accent tracking-tighter break-words leading-[25px] mt-[5px] mb-[3px]">
+                    {(balances.totals[profile?.id] || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </p>
                 </div>
               </div>
             </section>
-          </div>
+
+            <FoodBalanceCard expenses={expenses} />
+            </div>
+          </>
         );
       case 'registry':
         return (
-          <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <header className="mb-8 space-y-1">
-              <p className="text-[10px] uppercase tracking-[0.3em] font-bold text-zinc-400 dark:text-zinc-500">Movimientos</p>
-              <h2 className="font-serif italic text-3xl text-zinc-900 dark:text-zinc-100">Historial</h2>
+          <>
+            <header className="px-8 pt-8 pb-6 space-y-1 text-header-fg">
+              <h2 className="font-serif italic text-4xl tracking-tight">Historial</h2>
+              <p className="text-[10px] uppercase tracking-[0.2em] font-medium opacity-80">Movimientos</p>
             </header>
-
-            <section className="space-y-6">
-              {isLoading ? (
-                <div className="p-12 text-center animate-pulse text-zinc-400 dark:text-zinc-500 italic bg-white dark:bg-zinc-900 rounded-[40px] border border-zinc-100 dark:border-zinc-800">
+            <div className="flex-1 bg-[#fbfbfb] dark:bg-zinc-950 rounded-t-[32px] p-6 md:p-8 pb-32">
+              <section className="space-y-6">
+                {isLoading ? (
+                  <div className="p-12 text-center animate-pulse text-zinc-400 dark:text-zinc-500 italic bg-white dark:bg-zinc-900 rounded-[32px] border border-zinc-100 dark:border-zinc-800">
                   Cargando transacciones...
                 </div>
               ) : (
@@ -234,22 +242,25 @@ export default function App() {
                   categories={categories}
                 />
               )}
-            </section>
-          </div>
+              </section>
+            </div>
+          </>
         );
       case 'analytics':
         return (
-          <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <header className="space-y-1">
-              <p className="text-[10px] uppercase tracking-[0.3em] font-bold text-zinc-400 dark:text-zinc-500">Visualización</p>
-              <h2 className="font-serif italic text-3xl text-zinc-900 dark:text-zinc-100">Análisis</h2>
+          <>
+            <header className="px-8 pt-8 pb-6 space-y-1 text-header-fg">
+              <h2 className="font-serif italic text-4xl tracking-tight">Análisis</h2>
+              <p className="text-[10px] uppercase tracking-[0.2em] font-medium opacity-80">Visualización</p>
             </header>
-            <AnalyticsView 
-              expenses={filteredExpenses} 
-              spaceUsers={spaceUsers}
-              categories={categories}
-            />
-          </div>
+            <div className="flex-1 bg-[#fbfbfb] dark:bg-zinc-950 rounded-t-[32px] p-6 md:p-8 pb-32">
+              <AnalyticsView 
+                expenses={filteredExpenses} 
+                spaceUsers={spaceUsers}
+                categories={categories}
+              />
+            </div>
+          </>
         );
       case 'settings':
         return (
@@ -263,6 +274,8 @@ export default function App() {
             categoriesLoading={categoriesLoading}
             theme={theme}
             setTheme={setTheme}
+            accent={accent}
+            setAccent={setAccent}
           />
         );
       default:

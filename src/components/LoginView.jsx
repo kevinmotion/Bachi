@@ -32,29 +32,29 @@ export default function LoginView() {
   };
 
   return (
-    <div className="min-h-screen bg-white flex flex-col items-center justify-center p-6 animate-in fade-in duration-700">
+    <div className="min-h-screen bg-[#fbfbfb] dark:bg-zinc-950 flex flex-col items-center justify-center p-6 animate-in fade-in duration-700">
       <div className="w-full max-w-md space-y-8">
         <div className="text-center space-y-4">
-          <div className="w-20 h-20 bg-zinc-900 rounded-[32px] flex items-center justify-center mx-auto shadow-2xl shadow-zinc-200">
-            <Heart className="text-white fill-white" size={32} />
+          <div className="w-20 h-20 bg-accent rounded-[32px] flex items-center justify-center mx-auto shadow-2xl shadow-zinc-200">
+            <Heart className="text-accent-foreground fill-accent-foreground" size={32} />
           </div>
           <div className="space-y-2">
-            <h1 className="font-serif italic text-4xl text-zinc-900">Gastos en Pareja</h1>
+            <h1 className="font-serif italic text-4xl text-zinc-900 dark:text-zinc-100">Gastos en Pareja</h1>
             <p className="text-zinc-400 text-sm">Sincroniza tus finanzas con amor y orden.</p>
           </div>
         </div>
 
-        <div className="bg-white p-8 rounded-[40px] border border-zinc-200 shadow-xl shadow-zinc-100 space-y-6">
-          <div className="flex p-1 bg-zinc-100 rounded-2xl">
+        <div className="bg-white dark:bg-zinc-900 p-8 rounded-[32px] border border-zinc-200 dark:border-zinc-800 shadow-xl shadow-zinc-100 dark:shadow-none space-y-6">
+          <div className="flex p-1 bg-zinc-100 dark:bg-zinc-950 rounded-2xl">
             <button 
               onClick={() => setIsLogin(true)}
-              className={`flex-1 py-3 rounded-xl text-xs font-bold transition-all ${isLogin ? 'bg-white text-zinc-900 shadow-sm' : 'text-zinc-400'}`}
+              className={`flex-1 py-3 rounded-xl text-xs font-bold transition-all ${isLogin ? 'bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 shadow-sm' : 'text-zinc-400 dark:text-zinc-500'}`}
             >
               Iniciar Sesión
             </button>
             <button 
               onClick={() => setIsLogin(false)}
-              className={`flex-1 py-3 rounded-xl text-xs font-bold transition-all ${!isLogin ? 'bg-white text-zinc-900 shadow-sm' : 'text-zinc-400'}`}
+              className={`flex-1 py-3 rounded-xl text-xs font-bold transition-all ${!isLogin ? 'bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 shadow-sm' : 'text-zinc-400 dark:text-zinc-500'}`}
             >
               Registrarse
             </button>
@@ -64,14 +64,14 @@ export default function LoginView() {
             <div className="space-y-1">
               <label className="text-[10px] uppercase font-bold tracking-widest opacity-30 ml-1">Email</label>
               <div className="relative">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-300" size={18} />
+                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-300 dark:text-zinc-600" size={18} />
                 <input 
                   type="email"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="tu@email.com"
-                  className="w-full bg-zinc-50 border border-zinc-100 rounded-2xl pl-12 pr-4 py-4 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-900 transition-all"
+                  className="w-full bg-zinc-50 dark:bg-zinc-950 border border-zinc-100 dark:border-zinc-800 rounded-2xl pl-12 pr-4 py-4 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-900 dark:focus:ring-zinc-100 transition-all placeholder:text-zinc-400 dark:placeholder:text-zinc-600"
                 />
               </div>
             </div>
@@ -79,20 +79,20 @@ export default function LoginView() {
             <div className="space-y-1">
               <label className="text-[10px] uppercase font-bold tracking-widest opacity-30 ml-1">Contraseña</label>
               <div className="relative">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-300" size={18} />
+                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-300 dark:text-zinc-600" size={18} />
                 <input 
                   type="password"
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full bg-zinc-50 border border-zinc-100 rounded-2xl pl-12 pr-4 py-4 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-900 transition-all"
+                  className="w-full bg-zinc-50 dark:bg-zinc-950 border border-zinc-100 dark:border-zinc-800 rounded-2xl pl-12 pr-4 py-4 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-900 dark:focus:ring-zinc-100 transition-all placeholder:text-zinc-400 dark:placeholder:text-zinc-600"
                 />
               </div>
             </div>
 
             {error && (
-              <div className="p-4 bg-rose-50 border border-rose-100 text-rose-600 rounded-2xl text-xs font-medium animate-in shake duration-300">
+              <div className="p-4 bg-rose-50 dark:bg-rose-950/30 border border-rose-100 dark:border-rose-900 text-rose-600 dark:text-rose-400 rounded-2xl text-xs font-medium animate-in shake duration-300">
                 {error}
               </div>
             )}
@@ -100,7 +100,7 @@ export default function LoginView() {
             <button 
               type="submit"
               disabled={loading}
-              className="w-full bg-zinc-900 text-white py-5 rounded-[24px] font-bold text-sm flex items-center justify-center gap-2 shadow-2xl shadow-zinc-200 hover:bg-black transition-all active:scale-[0.98] disabled:opacity-50"
+              className="w-full bg-accent text-accent-foreground py-5 rounded-[24px] font-bold text-sm flex items-center justify-center gap-2 shadow-2xl shadow-zinc-200 hover:opacity-90 transition-all active:scale-[0.98] disabled:opacity-50"
             >
               {loading ? (
                 <Loader2 className="animate-spin" size={20} />
