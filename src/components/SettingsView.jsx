@@ -14,7 +14,7 @@ import {
   Terminal, ThumbsUp, Ticket, Timer, Wrench, Trash, Trophy, Truck, Tv, 
   Unlock, Upload, Video, Volume2, Wallet, Watch, Wifi
 } from 'lucide-react';
-import { supabase } from '../lib/supabaseClient';
+import { supabase } from '../services/supabaseClient';
 import { motion, AnimatePresence } from 'motion/react';
 
 const ICON_OPTIONS = [
@@ -324,16 +324,30 @@ export default function SettingsView({
 
   const handleSync = async () => {
     if (!partnerUserId.trim()) return alert("Ingrese un ID");
+    
+    // Prevent self-sync
+    if (partnerUserId.trim() === authUserId) {
+        alert("No puedes vincularte contigo mismo.");
+        return;
+    }
+
     setLinking(true);
     try {
-      // 1. Buscar el espacio_id de la pareja
-      const { data: partnerData, error: fetchError } = await supabase
-        .from('perfiles')
-        .select('espacio_shared_id')
-        .eq('id', partnerUserId.trim())
-        .single();
-      
-      if (fetchError || !partnerData) {
+      // 1. Verificar existencia de la pareja
+      let partnerData;
+      try {
+        const { data, error } = await supabase
+          .from('perfiles')
+          .select('espacio_shared_id')
+          .eq('id', partnerUserId.trim())
+          .single();
+        
+        if (error || !data) {
+          throw new Error("No se encontró el ID de la pareja. Verifica que sea correcto.");
+        }
+        partnerData = data;
+      } catch (err) {
+        // Clear error message for the user
         throw new Error("No se encontró el ID de la pareja. Verifica que sea correcto.");
       }
       

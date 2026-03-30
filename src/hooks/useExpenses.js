@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { supabase } from '../lib/supabaseClient';
+import { supabase } from '../services/supabaseClient';
 
 export const useExpenses = (userName = 'Usuario A', partnerName = 'Usuario B', profile) => {
   const espacioId = profile?.espacio_shared_id;
@@ -136,7 +136,7 @@ export const useExpenses = (userName = 'Usuario A', partnerName = 'Usuario B', p
       netBalance,
       summary
     };
-  }, [expenses, userName, partnerName, spaceUsers]);
+  }, [expenses, spaceUsers]);
 
   const deleteExpense = async (id) => {
     console.log("Iniciando borrado para ID:", id);

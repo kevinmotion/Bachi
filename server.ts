@@ -2,7 +2,7 @@ import express from "express";
 import { createServer as createViteServer } from "vite";
 import path from "path";
 import { fileURLToPath } from "url";
-import { supabase } from "./src/services/supabaseClient.js";
+import { supabase } from "./src/services/supabaseClient";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 

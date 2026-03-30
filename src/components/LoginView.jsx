@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { supabase } from '../lib/supabaseClient';
+import { supabase } from '../services/supabaseClient';
 import { LogIn, UserPlus, Mail, Lock, Loader2, Heart } from 'lucide-react';
 
 export default function LoginView() {

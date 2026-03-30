@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { supabase } from '../lib/supabaseClient';
+import { supabase } from '../services/supabaseClient';
 
 export const useCategories = (profile) => {
   const espacioId = profile?.espacio_shared_id;

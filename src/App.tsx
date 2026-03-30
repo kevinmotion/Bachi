@@ -9,7 +9,7 @@ import Layout from './components/Layout';
 import SettingsView from './components/SettingsView';
 import AnalyticsView from './components/AnalyticsView';
 import LoginView from './components/LoginView';
-import { supabase } from './lib/supabaseClient';
+import { supabase } from './services/supabaseClient';
 import { motion, AnimatePresence } from 'motion/react';
 import { Wallet, PlusCircle, History, LayoutDashboard, LogOut, Loader2, PieChart, Plus } from 'lucide-react';
 
@@ -63,6 +63,12 @@ export default function App() {
 
   const fetchProfile = async (userId: string, email: string) => {
     try {
+      // Security check: Verify userId matches current session
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session || session.user.id !== userId) {
+        throw new Error("Security violation: Session mismatch");
+      }
+
       // First, try to fetch the existing profile
       let { data, error } = await supabase
         .from('perfiles')
@@ -72,15 +78,17 @@ export default function App() {
       
       if (error && error.code === 'PGRST116') {
         // Profile doesn't exist, create it
+        const newProfile = { 
+          id: userId, 
+          email: email,
+          nombre: 'Usuario', 
+          espacio_shared_id: userId, // Ensure it's initialized with userId
+          accent_color: accent 
+        };
+
         const { data: newData, error: insertError } = await supabase
           .from('perfiles')
-          .insert({ 
-            id: userId, 
-            email: email,
-            nombre: 'Usuario', 
-            espacio_shared_id: userId,
-            accent_color: accent // Use current local accent as default for new profile
-          })
+          .insert(newProfile)
           .select()
           .single();
         
