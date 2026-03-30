@@ -104,9 +104,16 @@ export default function ExpenseForm({
     e.preventDefault();
     if (!formData.concepto || !formData.monto) return;
 
+    const montoNum = parseFloat(formData.monto);
+    if (montoNum <= 0) {
+      alert('El monto debe ser mayor a cero');
+      return;
+    }
+
     const payload = {
       ...formData,
-      monto: parseFloat(formData.monto),
+      concepto: formData.concepto.trim(),
+      monto: montoNum,
       tipo_cambio: formData.moneda === 'USD' ? parseFloat(formData.tipo_cambio) : 1,
       factor_deuda: parseFloat(formData.factor_deuda),
       notas: nota
